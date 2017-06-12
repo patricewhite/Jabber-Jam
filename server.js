@@ -9,4 +9,4 @@ app.get('/', (request, response) => {
 
 app.listen(process.env.PORT || 8080);
 
-module.exports = {app}
+module.exports = {app};
