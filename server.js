@@ -9,10 +9,18 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
+app.use(setCorsHeaders);
 app.use(express.static('public'));
 app.use('/users', userRouter);
 app.use('/chatrooms', chatRouter);
 app.use(morgan('common'));
+
+function setCorsHeaders(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+  next();
+}
 
 app.get('/', (request, response) => {
   response.sendFile(__dirname + '/index.html');

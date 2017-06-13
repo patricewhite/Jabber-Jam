@@ -101,6 +101,33 @@ describe('ChatRoom API resource', function(){
       });
     });
 
+    it('should return chats with the correct fields', function(){
+
+      let res;
+      return chai.request(app)
+      .get('/chatrooms')
+      .then(function(res) {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('array');
+        res.body.length.should.be.at.least(1);
+        res.body.forEach(function(chat) {
+          console.log("chat object??",chat)
+          chat.should.be.a('object');
+          chat.shuold.include.key('id', 'users', 'messages', 'title', 'category');
+        });
+        res = res.body[0];
+        console.log("res body first",res);
+        return User.findById(res.id).exec();
+      })
+      .then(chats => {
+        res.users.should.equal(chats.users);
+        res.messages.should.equal(chats.messages);
+        res.title.should.equal(chats.title);
+        res.category.should.equal(chats.category);
+      });
+    });
+
 
 
   });
