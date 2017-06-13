@@ -1,0 +1,103 @@
+/************************************************************
+                        Grid Layout
+*************************************************************/
+/*Makes sure everything is the same size*/
+*{
+	box-sizing:border-box;
+}
+
+/*Setting the grid layout*/
+.row{
+	max-width: 1000px;
+	padding-left:20px;
+	padding-right:20px;
+	margin:0 auto;
+  /*position:relative;
+  top:13%;*/
+}
+
+/*Clearfix*/
+.row::before, .row::after{
+	display: table;
+	content: '';
+}
+.row::after{
+	clear:both;
+}
+
+/*3 columns*/
+.col-4,.col-6, .col-12{
+	padding-left:1.04166666%;
+	padding-right:1.04166666%;
+}
+
+/*Mobile*/
+.col-4, .col-6 .col-12{
+	width:100%;
+}
+
+/************************************************************
+                    Media Screens
+*************************************************************/
+/*Larger screen than 360px*/
+@media only screen and (min-width:360px){
+  /*Nav bar stuff*/
+  .nav_el{
+    padding: 0px 15% 0px 0px;
+  }
+}
+
+/*Larger screen than 400px*/
+@media only screen and (min-width:400px){
+  /*Nav bar stuff*/
+  .nav_el{
+    padding: 0px 25% 0px 0px;
+  }
+}
+
+/*Larger screen than 640px*/
+@media only screen and (min-width:640px){
+	/*Nav bar stuff*/
+  .nav_el{
+    padding: 0px 55% 0px 0px;
+  }
+  .nav_user{
+    padding: 0px 0px 0px 5%;
+  }
+
+  /*Main screen stuff*/
+  .col-4{
+		width:25%;
+	}
+  .col-6{
+    width:50%;
+  }
+  .col-4,.col-6, .col-12{
+    float:left;
+  }
+  .list_chatroom{
+    margin-top:60px;
+  }
+
+  /*signup login form stuff*/
+  .container{
+    width:30%;
+    height:60%;
+  }
+}
+
+/*Larger screen than 1000px*/
+@media only screen and (min-width:1000px){
+	/*Nav bar stuff*/
+  .nav_el{
+    padding: 0px 62% 0px 3%;
+  }
+}
+
+/*Screen with at least 1000px heights*/
+@media only screen and (min-height:1000px){
+  /*signup login form stuff*/
+  .container{
+    height:40%;
+  }
+}

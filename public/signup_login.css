@@ -1,0 +1,82 @@
+/************************************************************
+                    Sign Up Login Forms
+*************************************************************/
+/*white container*/
+.container{
+  margin:0 auto;
+  background-color: white;
+  height: 70%;
+  width: 80%;
+  position: relative;
+  top:18%;
+}
+
+/************************************************************
+                    Sign Up Forms
+*************************************************************/
+/*legend stuff*/
+.signup_legend{
+  font-size:30px;
+  text-align:center;
+  padding-bottom:5px;
+}
+
+/*signup form*/
+.signup_form{
+  padding: 10px;
+}
+
+/*labels in signup form*/
+.signup_form label{
+  display:block;
+  margin-bottom:5px;
+  height:10%;
+}
+
+/*inputs in signup form*/
+.signup_form input{
+  display: block;
+  width: 100%;
+  height: 10%;
+  margin-bottom: 15px;
+}
+
+/*submit button in signup form*/
+.signup_form submit{
+  height:10%
+}
+
+/************************************************************
+                        Login Forms
+*************************************************************/
+/*legend stuff*/
+.login_legend{
+  font-size:30px;
+  text-align:center;
+  padding-bottom:15px;    
+}
+
+/*login form*/
+.login_form{
+  padding: 20px;
+}
+
+/*labels in login form*/
+.login_form label{
+  display:block;
+  margin-bottom:5px;
+  height:10%;
+}
+
+/*inputs in login form*/
+.login_form input{
+  display: block;
+  width: 100%;
+  height: 10%;
+  margin-bottom: 15px;
+}
+
+/*submit button in login form*/
+.login_form submit{
+  height:10%
+}
