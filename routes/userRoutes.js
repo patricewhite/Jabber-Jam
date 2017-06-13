@@ -6,6 +6,25 @@ const mongoose = require('mongoose');
 
 const{User} = require('../models/chatroom');
 
+/////////////////////Get for User//////////////////////////
+router.get('/', jsonParser, (req, res) => {
+  User
+    .find()
+    .exec()
+    .then(users => {
+      res.json({
+        users: users.map(
+          (user) => user.apiRepr())
+      });
+    })
+    .catch(
+      err => {
+        console.err(err);
+        res.status(500).json({message: 'Internal server error'});
+      }
+    );
+});
+
 //////////////////// Post for User/////////////////////////
 router.post('/', jsonParser, (req, res) => {
   const requiredFields = ['username', 'password', 'email'];
