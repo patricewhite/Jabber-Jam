@@ -12,7 +12,7 @@ const chatRoomSchema = mongoose.Schema({
   category:{type:String,required:true}
 });
 
-chatRoomSchema.methods.apiRepr(function(){
+chatRoomSchema.methods.apiRepr = function(){
   return {
     id: this._id,
     users:this.users,
@@ -20,7 +20,7 @@ chatRoomSchema.methods.apiRepr(function(){
     title:this.title,
     category:this.category
   };
-});
+};
 /////////////////////////////////////////////////////////////////////////////////////
 ///////////////           User Schema                  /////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
   password:{type:String, required:true},
   firstName:String,
   lastName:String,
-  chatroomid:[{id:mongoose.Schema.type.objectID}],
+  chatroomid:[{id:mongoose.Schema.Types.ObjectId}],
   email:{type:String, required:true}
 });
 
@@ -42,9 +42,10 @@ userSchema.virtual('fullName').get(function(){
 });
 
 userSchema.methods.apiRepr = function(){
+  console.log(this.fullName);
   return {
     username: this.username,
-    fullname: this.fullname,
+    fullname: this.fullName,
     email: this.email
   };
 };
