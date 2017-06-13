@@ -5,7 +5,7 @@ const jsonParser = bodyParser.json();
 
 const{User} = require('../models/chatroom');
 
-app.get()
+app.get();
 
 
 
