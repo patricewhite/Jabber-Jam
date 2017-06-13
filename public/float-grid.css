@@ -71,12 +71,17 @@
   .col-6{
     width:50%;
   }
+  .container{
+    width:30%;
+    height:60%;
+  }
 }
 
-/*Larger screen than 1000px*/
+/*Larger screen than 1200px*/
 @media only screen and (min-width:1000px){
 	/*Nav bar stuff*/
   .nav_el{
     padding: 0px 62% 0px 3%;
   }
 }
+
