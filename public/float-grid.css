@@ -71,13 +71,15 @@
   .col-6{
     width:50%;
   }
+
+  /*signup login form stuff*/
   .container{
     width:30%;
     height:60%;
   }
 }
 
-/*Larger screen than 1200px*/
+/*Larger screen than 1000px*/
 @media only screen and (min-width:1000px){
 	/*Nav bar stuff*/
   .nav_el{
@@ -85,3 +87,10 @@
   }
 }
 
+/*Screen with at least 1000px heights*/
+@media only screen and (min-height:1000px){
+  /*signup login form stuff*/
+  .container{
+    height:40%;
+  }
+}
