@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const{closeServer, runServer, app} = require('../server')
 const{ChatRoom, User} = require('../models/chatroom');
 const {TEST_DATABASE_URL} = require('../config');
-//const {DATABASE_URL} = require('../config');
+const {DATABASE_URL} = require('../config');
 chai.use(chaiHttp);
 
 function tearDownDb() {
