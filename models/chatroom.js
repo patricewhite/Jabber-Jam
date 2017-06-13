@@ -45,7 +45,7 @@ userSchema.methods.apiRepr = function(){
   console.log(this.fullName);
   return {
     username: this.username,
-    fullname: this.fullname,
+    fullname: this.fullName,
     email: this.email
   };
 };

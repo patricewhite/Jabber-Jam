@@ -23,7 +23,8 @@ router.post('/', jsonParser, (req, res) => {
     username: req.body.username,
     password: req.body.password,
     email: req.body.email,
-    fullName: req.body.fullName
+    firstName: req.body.firstName,
+    lastName: req.body.lastName
   })
   .then(
     user => {
