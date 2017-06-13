@@ -18,7 +18,7 @@ html,body, .signup_login, .main_screen, .chatroom_interior{
   list-style-type: none;
   padding-left:2.5%;
 }
-
+ 
 /*Gradient brown background*/
 .grad_brown{
   background: brown; /* For browsers that do not support gradients */
