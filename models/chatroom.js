@@ -42,6 +42,7 @@ userSchema.virtual('fullName').get(function(){
 });
 
 userSchema.methods.apiRepr = function(){
+  console.log(this.fullName);
   return {
     username: this.username,
     fullname: this.fullname,
