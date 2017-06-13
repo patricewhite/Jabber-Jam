@@ -114,13 +114,14 @@ describe('ChatRoom API resource', function(){
         res.body.forEach(function(chat) {
           console.log("chat object??",chat)
           chat.should.be.a('object');
-          chat.shuold.include.key('id', 'users', 'messages', 'title', 'category');
+          chat.should.include.key('id', 'users', 'messages', 'title', 'category');
         });
         res = res.body[0];
         console.log("res body first",res);
         return User.findById(res.id).exec();
       })
       .then(chats => {
+        console.log("",res.users);
         res.users.should.equal(chats.users);
         res.messages.should.equal(chats.messages);
         res.title.should.equal(chats.title);
