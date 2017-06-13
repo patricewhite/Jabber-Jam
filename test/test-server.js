@@ -6,7 +6,7 @@ const{app} = require('../server')
 chai.use(chaiHttp);
 
 describe('Get endpoint', function(){
-  it('very you hit root url', function(){
+  it('verify you hit root url', function(){
     return chai.request(app)
     .get('/')
     .then(res => {
