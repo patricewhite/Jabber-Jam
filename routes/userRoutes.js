@@ -1,15 +1,25 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const router = express.Router();
-// const jsonParser = bodyParser.json();
-const router = 'hey';
-//const{Users} = require('../models/models');
+const router = express.Router();
+const jsonParser = bodyParser.json();
+
+const{Users} = require('../models/models');
 
 
-// app.post('/users',jsonParser, (req, res) => {
-//   const user = Users.create(req.body.username);
-//   res.status(201).json(user);
-// })
+router.post('/users',jsonParser, (req, res) => {
+  // const requiredFields = ['username'];
+  // for (let i = 0; i < requiredFields.length; i++) {
+  //   const field = requiredFields[i];
+  //   if (!(field in req.body)) {
+  //     const message = `Missing ${field} in request body.`;
+  //     console.error(message);
+  //     return res.status(400).send(message);
+  //   }
+  // }
+
+  const user = Users.create(req.body.username);
+  res.status(201).json(user);
+});
 
 
 
@@ -20,4 +30,4 @@ const router = 'hey';
 
 
 
-module.export = router;
+module.exports = router;
