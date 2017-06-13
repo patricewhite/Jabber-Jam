@@ -58,12 +58,32 @@ router.get('/', (req,res) => {
 ////////////////////PUT for ChatRoom /////////////////////////
 
 router.put('/:id', (req, res) => {
+  if(!(req.params.id === req.body.id)){
+    const message = (`Request path id (${req.params.id}) and reques body id
+      (${req.body.id}) must match`);
+    console.error(message);
+    res.status(400).json({message: message});
+  }
 
-})
+  const toUpdate = {};
+  const updateableFields = ['title', 'category', 'messages', 'users'];
 
+  updateableFields.forEach(field => {
+    if( field in req.body) {
+      toUpdate[field] = req.body[field];
+    }
+  });
 
+  ChatRoom
+    .findByIdAndUpdate(req.params.id, {$set: toUpdate})
+    .exec()
+    .then(chat => res.status(204).end())
+    .catch(err => res.status(500).json({message: 'Internal server error'}));
+});
 
-
+router.use('*', function(req, res) {
+  res.status(404).json({message: 'Not Found'});
+});
 
 
 module.exports = router;
