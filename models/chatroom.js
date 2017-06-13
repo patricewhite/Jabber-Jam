@@ -34,7 +34,7 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.virtual('fullName').get(function(){
-  return `${this.firstName} ${this.lastName}`.trim();
+  return `${this.firstName} ${this.lastName}`.trim(); 
 }).set(function(fullName){
   const [first, last] = fullName.split(' ');
   this.firstName = first;
