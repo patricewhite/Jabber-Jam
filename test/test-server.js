@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const{closeServer, runServer, app} = require('../server')
 const{ChatRoom, User} = require('../models/chatroom');
 const {TEST_DATABASE_URL} = require('../config');
-const {DATABASE_URL} = require('../config');
+//const {DATABASE_URL} = require('../config');
 chai.use(chaiHttp);
 
 function tearDownDb() {
@@ -97,13 +97,14 @@ describe('ChatRoom API resource', function(){
         return ChatRoom.find().count().exec();
       })
       .then(count => {
+        console.log("count",count)
         res.body.should.have.lengthOf(count);
       });
     });
 
     it('should return chats with the correct fields', function(){
 
-      let res;
+      let resChat;
       return chai.request(app)
       .get('/chatrooms')
       .then(function(res) {
@@ -111,21 +112,23 @@ describe('ChatRoom API resource', function(){
         res.should.be.json;
         res.body.should.be.a('array');
         res.body.length.should.be.at.least(1);
+
         res.body.forEach(function(chat) {
-          console.log("chat object??",chat)
+          //console.log("chat object??",chat)
           chat.should.be.a('object');
           chat.should.include.key('id', 'users', 'messages', 'title', 'category');
         });
-        res = res.body[0];
-        console.log("res body first",res);
-        return User.findById(res.id).exec();
+        resChat = res.body[0];
+        console.log("res body first",resChat);
+        return ChatRoom.findById(resChat.id).exec();
       })
-      .then(chats => {
-        console.log("",res.users);
-        res.users.should.equal(chats.users);
-        res.messages.should.equal(chats.messages);
-        res.title.should.equal(chats.title);
-        res.category.should.equal(chats.category);
+      .then(function(chat) {
+        console.log("chat",chat);
+        //console.log("ughhhh", chat.title);
+        resChat.users[0].username.should.equal(chat.users[0].username);
+        resChat.messages[0].should.equal(chat.messages[0]);
+        resChat.title.should.equal(chat.title);
+        resChat.category.should.equal(chat.category);
       });
     });
 
