@@ -43,10 +43,7 @@ router.get('/', (req,res) => {
     .find()
     .exec()
     .then(chats => {
-      res.json({
-        posts: chats.map(
-          (chats) => chats.apiRepr())
-      });
+      res.json(chats.map(chats => chats.apiRepr()));
     })
     .catch(
       err => {
@@ -61,9 +58,7 @@ router.get('/:id', (req, res) => {
     .findById(req.params.id)
     .exec()
     .then( chats => {
-      res.json({
-          chats:chats.apiRepr()
-        });
+      res.json(chats.apiRepr());
       })
     .catch(
       err => {

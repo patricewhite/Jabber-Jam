@@ -12,10 +12,7 @@ router.get('/', jsonParser, (req, res) => {
     .find()
     .exec()
     .then(users => {
-      res.json({
-        users: users.map(
-          (user) => user.apiRepr())
-      });
+      res.json(users.map(user => user.apiRepr()));
     })
     .catch(
       err => {
