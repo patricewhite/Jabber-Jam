@@ -4,12 +4,40 @@
 ///////////////          State                  /////////////
 ////////////////////////////////////////////////////////////
 const appState ={
+  chatroomList:[],
+  categoryList:[]
 };
-
+function addToData(){
+  // const request = new Request('https://jabber-jam.herokuapp.com/chatrooms',{
+  //   method: 'POST',
+  //   mode:'cors',
+  //   headers: new Headers({
+  //     'Content-Type': ''
+  //   })
+  // }); 
+  fetch('https://jabber-jam.herokuapp.com/chatrooms',{
+    method: 'POST',
+    mode:'cors',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  })
+  .then(res=>{
+    console.log(res);
+    alert('ding ding');
+  }); 
+}
 //////////////////////////////////////////////////////////////
 ///////////////        State Modification       /////////////
 ////////////////////////////////////////////////////////////
-
+function addDataChatroom(state){
+  const request = new Request('https://jabber-jam.herokuapp.com/chatrooms',{
+    method: 'GET'
+  });
+  fetch(request).then(res=>{
+    
+  });
+}
 //////////////////////////////////////////////////////////////
 ///////////////          Render                 /////////////
 ////////////////////////////////////////////////////////////
@@ -17,7 +45,16 @@ const appState ={
 //////////////////////////////////////////////////////////////
 ///////////////          Event Listeners        /////////////
 ////////////////////////////////////////////////////////////
-
+function createChatroom(){
+  $('.chatroom_form').on('submit',function(event){
+    event.preventDefault();
+    addToData();
+    
+  });
+}
 //////////////////////////////////////////////////////////////
 ///////////////          Callback Function      /////////////
 ////////////////////////////////////////////////////////////
+$(function(){
+  createChatroom();
+});

@@ -2,7 +2,7 @@
                     background
 *************************************************************/
 /*Set height for everything to 100%*/
-html,body, .signup_login{
+html,body, .signup_login, .main_screen, .chatroom_interior{
   height:100%;
 }
 
@@ -96,4 +96,11 @@ html,body, .signup_login{
   background: -o-linear-gradient(right, darkred,red,#ff2424,#ff6666,#ff2424); /* For Opera 11.1 to 12.0 */
   background: -moz-linear-gradient(right, darkred,red,#ff2424,#ff6666,#ff2424); /* For Firefox 3.6 to 15 */
   background: linear-gradient(right, darkred,red,#ff2424,#ff6666,#ff2424); /* Standard syntax */
+}
+
+/*fieldset default*/
+fieldset{
+    margin:0;
+    padding:0;
+    border:0;
 }
