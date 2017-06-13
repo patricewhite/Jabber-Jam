@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
   password:{type:String, required:true},
   firstName:String,
   lastName:String,
-  //chatroomid:[{id:mongoose.Schema.type.objectID}],
+  chatroomid:[{id:mongoose.Schema.Types.ObjectId}],
   email:{type:String, required:true}
 });
 

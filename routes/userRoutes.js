@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const{User} = require('../models/chatroom');
 
-
+//////////////////// Post for User/////////////////////////
 router.post('/', jsonParser, (req, res) => {
   const requiredFields = ['username', 'password', 'email'];
   for (let i = 0; i < requiredFields.length; i++) {
@@ -34,12 +34,6 @@ router.post('/', jsonParser, (req, res) => {
       res.status(500).json({message: 'Internal server error'});
     });
 });
-
-
-
-
-
-
 
 
 

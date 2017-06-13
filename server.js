@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const userRouter = require('./routes/userRoutes');
-const chatRouter = require('./routes/userRoutes');
+const chatRouter = require('./routes/chatRoutes');
 const {DATABASE_URL, PORT} = require('./config');
 const mongoose = require('mongoose');
 
