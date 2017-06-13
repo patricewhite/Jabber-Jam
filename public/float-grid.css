@@ -49,6 +49,9 @@
   .nav_el{
     padding: 0px 55% 0px 0px;
   }
+  .nav_user{
+    padding: 0px 0px 0px 5%;
+  }
 }
 @media only screen and (min-width:1000px){
 	.col-4{
