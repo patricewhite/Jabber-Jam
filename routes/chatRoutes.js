@@ -53,9 +53,24 @@ router.get('/', (req,res) => {
         console.error(err);
         res.status(500).json({message: 'Internal server error'});
       });
-})
+});
 
-//router.get('/:id', (req))
+router.get('/:id', (req, res) => {
+  console.log(req.params.id);
+  ChatRoom
+    .findById(req.params.id)
+    .exec()
+    .then( chats => {
+      res.json({
+          chats:chats.apiRepr()
+        });
+      })
+    .catch(
+      err => {
+        console.error(err);
+        res.status(500).json({message: 'Internal server error'});
+      });
+});
 
 ////////////////////PUT for ChatRoom /////////////////////////
 
