@@ -37,7 +37,7 @@ function render(state,element){
       </form>`;
   }else if(state.login && state.signUp === false){
     formStr =`      
-      <form class="login_form" action="public/mainScreen.html" method="post">
+      <form class="login_form" action="mainScreen.html" method="post">
         <fieldset name="login">
           <legend class="login_legend">Login</legend>
           <label for="username">Username</label>
