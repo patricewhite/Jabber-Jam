@@ -9,5 +9,6 @@ const appState ={
   login:false,
   //mainscreen.js stuff
   chatroomList:[],
-  categoryList:[]
+  categoryList:[],
+  filterChatroomList:[]
 };
