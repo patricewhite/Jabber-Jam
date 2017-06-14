@@ -93,7 +93,7 @@ function renderChatroomList(state,chatroomElement,categoryElement){
     let htmlStr = `<p>Chatroom List</p>
           <ul>`;
     const mappedChat = chatroomArr.map(el=>{
-      return `<li><a href="chatroom.html" class="chatroom_link">${el.title}</a></li>`;
+      return `<li data-id=${el.id}>${el.title}</li>`;
     }).join('\n\t');
 
     htmlStr += mappedChat + '</ul>';
@@ -126,10 +126,6 @@ function createChatroom(state){
     addToData($('.chatroom_form'))
     .then((resQ)=>{
       alert(`You have created the chatroom with the title ${resQ.title} and category ${resQ.category}`);
-      // renderChatroomList(state,$('.list_chatroom'));
-      // renderCategoryList(state,$('.category_list'));
-      // Promise.all([renderCategoryList(state,$('.category_list')),
-      //   renderChatroomList(state, $('.list_chatroom'))]);
       render(state,$('.list_chatroom'),$('.category_list'));
     });
   });
@@ -152,8 +148,6 @@ function showAllChatrooms(state){
 ///////////////          Callback Function      /////////////
 ////////////////////////////////////////////////////////////
 $(function(){
-  // Promise.all([renderCategoryList(appState,$('.category_list')),
-  //   renderChatroomList(appState, $('.list_chatroom'))]);
   render(appState,$('.list_chatroom'),$('.category_list'));
   createChatroom(appState);
   showFilterChatroom(appState);
