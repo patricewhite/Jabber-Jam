@@ -206,6 +206,56 @@ describe('ChatRoom API resource', function(){
       });
 
     });
+    it('should update users and messages',function(){
+      let chatRes;
+      const updateObj ={
+        users:[{username:'hiPatrice'},{username:'wassup101'}],
+        messages:['lol','hi','bye']
+      };
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(resultChat){
+        updateObj.id = resultChat.id;
+        return chai
+        .request(app)
+        .put(`/chatrooms/${resultChat.id}`)
+        .send(updateObj);
+      })
+      .then(function(res){
+        res.should.be.json;
+        res.should.be.a('object');
+        res.should.have.status(201);
+        res.body.should.include.keys(['id','title','category','messages','users']);
+        res.body.id.should.not.be.null;
+        res.body.id.should.equal(updateObj.id);
+        res.body.users.should.have.lengthOf(2);
+        for(let i =0;i<res.body.users.length;i++){
+          res.body.users[i].username.should.be.equal(updateObj.users[i].username);   
+        }       
+        res.body.messages.should.have.lengthOf(3);
+        for(let i =0;i<res.body.messages.length;i++){
+          res.body.messages[i].should.be.equal(updateObj.messages[i]);   
+        }
+        chatRes = res.body;
+        return ChatRoom
+        .findById(res.body.id)
+        .exec();  
+      })
+      .then(function(chat){
+        chat.id.should.equal(chatRes.id);
+        chat.title.should.equal(chatRes.title);
+        chat.category.should.equal(chatRes.category);
+        chat.users.should.have.lengthOf(2);
+        for(let i =0;i<chat.users.length;i++){
+          chat.users[i].username.should.be.equal(chatRes.users[i].username);   
+        }       
+        chat.messages.should.have.lengthOf(3);
+        for(let i =0;i<chat.messages.length;i++){
+          chat.messages[i].should.be.equal(chatRes.messages[i]);   
+        }
+      });
+    });
   });
   describe('Delete endpoint for chatroom',function(){
     it('should delete a post by id',function(){
