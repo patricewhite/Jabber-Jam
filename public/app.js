@@ -10,7 +10,9 @@ const appState ={
   //mainscreen.js stuff
   chatroomList:[],
   categoryList:[],
+  filterChatroomList:[],
   //chatroom.js
   sentMessages: [],
-  chatId: ''
+  chatId: '',
+  isMainScreen:true
 };

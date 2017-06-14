@@ -70,6 +70,11 @@ function getDataCategory(state){
     return res.json();
   });
 }
+
+/* Main screen set bool value for show/hide */
+function showAndHideMain(state){
+  return (state.isMainScreen)?state.isMainScreen = false:state.isMainScreen = true;
+}
 //////////////////////////////////////////////////////////////
 ///////////////          Render                 /////////////
 ////////////////////////////////////////////////////////////
