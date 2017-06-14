@@ -4,7 +4,7 @@ const should = chai.should();
 const faker = require('faker');
 const mongoose = require('mongoose');
 
-const{closeServer, runServer, app} = require('../server')
+const{closeServer, runServer, app} = require('../server');
 const{ChatRoom, User} = require('../models/chatroom');
 const {TEST_DATABASE_URL} = require('../config');
 const {DATABASE_URL} = require('../config');
@@ -25,7 +25,7 @@ const USER = {
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
   email: faker.internet.email()
-}
+};
 
 function seedUser(){
   const newUser = {
@@ -33,7 +33,7 @@ function seedUser(){
     firstName: USER.firstName,
     lastName: USER.lastName,
     email: USER.email
-  }
+  };
   return User.hashPassword(USER.password)
     .then(hash => {
       newUser.password = hash;
@@ -55,6 +55,15 @@ function seedChatroom(){
   return ChatRoom.insertMany(seedData);
 }
 
+describe('Testing root endpoint',function(){
+  it('should verify you hit root url', function(){
+    return chai.request(app)
+      .get('/')
+      .then(res => {
+        res.should.have.status(200);
+      });
+  });
+});
 describe('ChatRoom API resource', function(){
 
   before(function() {
@@ -75,16 +84,7 @@ describe('ChatRoom API resource', function(){
     return closeServer();
   });
 
-  describe('Get endpoint', function(){
-
-    it('should verify you hit root url', function(){
-      return chai.request(app)
-      .get('/')
-      .then(res => {
-        res.should.have.status(200);
-      });
-    });
-
+  describe('Get endpoint for chatroom', function(){
     it('should return all exisitng chatrooms', function(){
 
       let res;
@@ -97,7 +97,7 @@ describe('ChatRoom API resource', function(){
         return ChatRoom.find().count().exec();
       })
       .then(count => {
-        console.log("count",count)
+        console.log('count',count);
         res.body.should.have.lengthOf(count);
       });
     });
@@ -121,7 +121,7 @@ describe('ChatRoom API resource', function(){
         return ChatRoom.findById(resChat.id).exec();
       })
       .then(function(chat) {
-        console.log("chat",chat);
+        console.log('chat',chat);
         resChat.users[0].username.should.equal(chat.users[0].username);
         resChat.messages[0].should.equal(chat.messages[0]);
         resChat.title.should.equal(chat.title);
@@ -136,4 +136,4 @@ describe('ChatRoom API resource', function(){
 
 
 
-})
+});
