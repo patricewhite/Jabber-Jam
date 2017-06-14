@@ -90,7 +90,7 @@ describe('ChatRoom API resource', function(){
     return closeServer();
   });
 
-  describe('Get endpoint for chatroom', function(){
+  describe.only('Get endpoint for chatroom', function(){
     it('should return all exisitng chatrooms', function(){
 
       let res;
@@ -136,6 +136,28 @@ describe('ChatRoom API resource', function(){
         resChat.messages[0].should.equal(chat.messages[0]);
         resChat.title.should.equal(chat.title);
         resChat.category.should.equal(chat.category);
+      });
+    });
+
+    it('should return distinct categories for chatrooms', function(){
+      let resChat;
+      return chai
+      .request(app)
+      .get('/chatrooms/distinct')
+      .then(function(res) {
+        res.should.be.status(200);
+        res.body.should.be.a('array')
+        res.body.length.should.be.at.least(1);
+        resChat = res.body;
+        return ChatRoom
+        .distinct("category")
+        .exec()
+      })
+      .then(chat => {
+      console.log("res",resChat);
+      console.log("res 0",resChat[0]);
+      console.log("chat",chat);
+      resChat.should.deep.equal(chat);
       });
     });
   });
