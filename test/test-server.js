@@ -138,6 +138,25 @@ describe('ChatRoom API resource', function(){
         resChat.category.should.equal(chat.category);
       });
     });
+
+    it('should return distinct categories for chatrooms', function(){
+      let resChat;
+      return chai
+      .request(app)
+      .get('/chatrooms/distinct')
+      .then(function(res) {
+        res.should.be.status(200);
+        res.body.should.be.a('array')
+        res.body.length.should.be.at.least(1);
+        resChat = res.body;
+        return ChatRoom
+        .distinct("category")
+        .exec()
+      })
+      .then(chat => {
+      resChat.should.deep.equal(chat);
+      });
+    });
   });
   describe('Post endpoint for chatroom', function(){
     it('posted object should be in database', function(){
@@ -236,16 +255,16 @@ describe('ChatRoom API resource', function(){
         res.body.id.should.equal(updateObj.id);
         res.body.users.should.have.lengthOf(2);
         for(let i =0;i<res.body.users.length;i++){
-          res.body.users[i].username.should.be.equal(updateObj.users[i].username);   
-        }       
+          res.body.users[i].username.should.be.equal(updateObj.users[i].username);
+        }
         res.body.messages.should.have.lengthOf(3);
         for(let i =0;i<res.body.messages.length;i++){
-          res.body.messages[i].should.be.equal(updateObj.messages[i]);   
+          res.body.messages[i].should.be.equal(updateObj.messages[i]);
         }
         chatRes = res.body;
         return ChatRoom
         .findById(res.body.id)
-        .exec();  
+        .exec();
       })
       .then(function(chat){
         chat.id.should.equal(chatRes.id);
@@ -253,11 +272,11 @@ describe('ChatRoom API resource', function(){
         chat.category.should.equal(chatRes.category);
         chat.users.should.have.lengthOf(2);
         for(let i =0;i<chat.users.length;i++){
-          chat.users[i].username.should.be.equal(chatRes.users[i].username);   
-        }       
+          chat.users[i].username.should.be.equal(chatRes.users[i].username);
+        }
         chat.messages.should.have.lengthOf(3);
         for(let i =0;i<chat.messages.length;i++){
-          chat.messages[i].should.be.equal(chatRes.messages[i]);   
+          chat.messages[i].should.be.equal(chatRes.messages[i]);
         }
       });
     });
@@ -307,7 +326,7 @@ describe('Users API resource', function(){
     return closeServer();
   });
   describe('Get endpoint for users',function(){
-    
+
     it('get all users',function(){
       let userResArr;
       return chai
@@ -329,7 +348,7 @@ describe('Users API resource', function(){
         userResArr.should.have.lengthOf(count);
       });
     });
-    
+
     it('should get the right fields',function(){
       let userRes;
       return chai

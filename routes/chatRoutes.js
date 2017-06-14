@@ -11,7 +11,7 @@ router.use(jsonParser);
 router.post('/',(req,res) => {
   const requiredFields = ['title', 'category'];
   for (let i = 0; i < requiredFields.length; i++) {
-    const field = requiredFields[i];   
+    const field = requiredFields[i];
     if (!(field in req.body)) {
       const message = `Missing ${field} in request body.`;
       console.error(message);
@@ -50,6 +50,21 @@ router.get('/', (req,res) => {
       });
 });
 
+router.get('/distinct', (req, res) => {
+  ChatRoom
+  .distinct("category")
+  .exec()
+  .then( chats => {
+    console.log("chats",chats)
+    res.json(chats);
+    })
+  .catch(
+    err => {
+      console.log(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
+});
+
 router.get('/:id', (req, res) => {
   ChatRoom
     .findById(req.params.id)
@@ -73,7 +88,7 @@ router.put('/:id', (req, res) => {
     console.error(message);
     res.status(400).json({message: message});
   }
-  
+
   const toUpdate = {};
   const updateableFields = ['title', 'category', 'messages', 'users'];
 
