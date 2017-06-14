@@ -170,7 +170,43 @@ describe('ChatRoom API resource', function(){
   });
   describe('Put endpoint for chatroom',function(){
     it('should update title and category',function(){
-      let chat;
+      let chatRes;
+      const updateChat ={
+        title:'wassup',
+        category:'greeting'
+      };
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(resultChat){
+        updateChat.id = resultChat.id;
+        console.log(updateChat);
+        return chai
+        .request(app)
+        .put(`/chatrooms/${resultChat.id}`)
+        .send(updateChat);
+      })
+      .then(function(res){
+        console.log(res.body);
+        res.should.be.json;
+        res.should.be.a('object');
+        res.should.have.status(201);
+        res.body.should.include.keys(['id','title','category','messages','users']);
+        res.body.id.should.equal(updateChat.id);
+        res.body.id.should.not.be.null;
+        res.body.title.should.equal(updateChat.title);
+        res.body.category.should.equal(updateChat.category);
+        chatRes = res.body;
+        return ChatRoom
+        .findById(res.id)
+        .exec();
+      })
+      .then(function(chat){
+        chat.id.should.equal(chatRes.id);
+        chat.title.should.equal(chatRes.title);
+        chat.category.should.equal(chatRes.category);
+      });
+
     });
   });
   describe('Delete endpoint for chatroom',function(){
