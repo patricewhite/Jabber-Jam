@@ -19,7 +19,7 @@ function render(state,element){
   let formStr;
   if(state.signUp && state.login ===false){
     formStr = `      
-    <form class="signup_form"action="index.html" method="post">
+    <form class="signup_form"action="index.html">
         <fieldset name="signup">
           <legend class="signup_legend">Sign Up</legend>
           <label for="first-name">First Name</label>
@@ -37,7 +37,7 @@ function render(state,element){
       </form>`;
   }else if(state.login && state.signUp === false){
     formStr =`      
-      <form class="login_form" action="../mainScreen.html" method="post">
+      <form class="login_form" action="/mainScreen.html">
         <fieldset name="login">
           <legend class="login_legend">Login</legend>
           <label for="username">Username</label>
