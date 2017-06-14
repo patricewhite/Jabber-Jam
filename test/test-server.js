@@ -90,7 +90,7 @@ describe('ChatRoom API resource', function(){
     return closeServer();
   });
 
-  describe.only('Get endpoint for chatroom', function(){
+  describe('Get endpoint for chatroom', function(){
     it('should return all exisitng chatrooms', function(){
 
       let res;
@@ -154,9 +154,6 @@ describe('ChatRoom API resource', function(){
         .exec()
       })
       .then(chat => {
-      console.log("res",resChat);
-      console.log("res 0",resChat[0]);
-      console.log("chat",chat);
       resChat.should.deep.equal(chat);
       });
     });
