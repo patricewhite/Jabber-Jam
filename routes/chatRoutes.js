@@ -11,8 +11,7 @@ router.use(jsonParser);
 router.post('/',(req,res) => {
   const requiredFields = ['title', 'category'];
   for (let i = 0; i < requiredFields.length; i++) {
-    const field = requiredFields[i];
-    console.log(field);
+    const field = requiredFields[i];   
     if (!(field in req.body)) {
       const message = `Missing ${field} in request body.`;
       console.error(message);
@@ -26,7 +25,6 @@ router.post('/',(req,res) => {
   })
   .then(
     chats => {
-      console.log(chats);
       res.status(201).json(chats.apiRepr());
     })
     .catch(err => {
@@ -43,10 +41,7 @@ router.get('/', (req,res) => {
     .find()
     .exec()
     .then(chats => {
-      res.json({
-        posts: chats.map(
-          (chats) => chats.apiRepr())
-      });
+      res.json(chats.map(chats => chats.apiRepr()));
     })
     .catch(
       err => {
@@ -56,14 +51,11 @@ router.get('/', (req,res) => {
 });
 
 router.get('/:id', (req, res) => {
-  console.log(req.params.id);
   ChatRoom
     .findById(req.params.id)
     .exec()
     .then( chats => {
-      res.json({
-          chats:chats.apiRepr()
-        });
+      res.json(chats.apiRepr());
       })
     .catch(
       err => {
@@ -81,7 +73,7 @@ router.put('/:id', (req, res) => {
     console.error(message);
     res.status(400).json({message: message});
   }
-
+  
   const toUpdate = {};
   const updateableFields = ['title', 'category', 'messages', 'users'];
 
@@ -90,11 +82,10 @@ router.put('/:id', (req, res) => {
       toUpdate[field] = req.body[field];
     }
   });
-
   ChatRoom
-    .findByIdAndUpdate(req.params.id, {$set: toUpdate})
+    .findByIdAndUpdate(req.params.id, {$set: toUpdate},{new:true})
     .exec()
-    .then(chat => res.status(204).end())
+    .then(chat => res.status(201).json(chat.apiRepr()))
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 

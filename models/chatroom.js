@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
   password:{type:String, required:true},
   firstName:String,
   lastName:String,
-  chatroomid:[{id:mongoose.Schema.Types.ObjectId}],
+  chatroomId:[{id:mongoose.Schema.Types.ObjectId}],
   email:{type:String, required:true}
 });
 
@@ -44,7 +44,8 @@ userSchema.virtual('fullName').get(function(){
 userSchema.methods.apiRepr = function(){
   return {
     username: this.username,
-    fullname: this.fullName,
+    fullName: this.fullName,
+    ownChatRoom: this.chatroomId,
     email: this.email
   };
 };

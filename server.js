@@ -6,13 +6,23 @@ const userRouter = require('./routes/userRoutes');
 const chatRouter = require('./routes/chatRoutes');
 const {DATABASE_URL, PORT} = require('./config');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 mongoose.Promise = global.Promise;
 
+app.use(cors());
+// app.use(setCorsHeaders);
 app.use(express.static('public'));
 app.use('/users', userRouter);
 app.use('/chatrooms', chatRouter);
 app.use(morgan('common'));
+
+// function setCorsHeaders(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+//   next();
+// }
 
 app.get('/', (request, response) => {
   response.sendFile(__dirname + '/index.html');
