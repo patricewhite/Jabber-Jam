@@ -1,0 +1,26 @@
+.chatbox {
+  top: 100px;
+  position: relative;
+  height: 500px;
+  width: 70%;
+  margin-left: 250px;
+  background-color: white;
+}
+
+.messages {
+  top: 100px;
+  padding-top: 10px;
+  height: 200px;
+  position: relative;
+  margin-left: 235px;
+}
+
+#text {
+  width: 1000px;
+  height: 30px;
+}
+
+#button {
+  width: 100px;
+  height: 30px;
+}
