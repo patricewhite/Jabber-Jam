@@ -314,7 +314,6 @@ describe('Users API resource', function(){
       .request(app)
       .get('/users')
       .then(function(res){
-        //console.log(res.body);
         res.should.be.json;
         res.should.be.status(200);
         res.body.should.have.length.of.at.least(1);
@@ -327,7 +326,6 @@ describe('Users API resource', function(){
         .exec();
       })
       .then(function(count){
-        console.log(userResArr,count);
         userResArr.should.have.lengthOf(count);
       });
     });
