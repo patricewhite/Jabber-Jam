@@ -4,6 +4,7 @@
 /*Set height for everything to 100%*/
 html,body, .signup_login, .main_screen, .chatroom_interior{
   height:100%;
+  overflow:auto;
 }
 
 /************************************************************

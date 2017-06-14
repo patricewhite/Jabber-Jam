@@ -149,6 +149,16 @@ function showAllChatrooms(state){
     renderChatroomList(state,$('.list_chatroom'));
   });
 }
+
+/*hide mainscreen */
+function hideMainScreen(state){
+  $('.list_chatroom').on('click','li',function(event){
+    showAndHideMain(state);
+    $('.main_hide_show').hide();
+    $('.single_chatroom').show();
+  });
+}
+
 //////////////////////////////////////////////////////////////
 ///////////////          Callback Function      /////////////
 ////////////////////////////////////////////////////////////
@@ -157,4 +167,5 @@ $(function(){
   createChatroom(appState);
   showFilterChatroom(appState);
   showAllChatrooms(appState);
+  hideMainScreen(appState);
 });
