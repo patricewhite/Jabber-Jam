@@ -35,7 +35,6 @@
 .col-4, .col-6 .col-12{
 	width:100%;
 }
-
 /************************************************************
                     Media Screens
 *************************************************************/
@@ -78,7 +77,15 @@
   .list_chatroom{
     margin-top:60px;
   }
-
+  .category_list{
+    position:static;
+    height:130px;
+    width: 100%;
+    margin-top: 60px;
+  }
+  .category_list li{
+    display:block;
+  }
   /*signup login form stuff*/
   .container{
     width:30%;
