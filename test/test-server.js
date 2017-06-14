@@ -114,17 +114,14 @@ describe('ChatRoom API resource', function(){
         res.body.length.should.be.at.least(1);
 
         res.body.forEach(function(chat) {
-          //console.log("chat object??",chat)
           chat.should.be.a('object');
           chat.should.include.key('id', 'users', 'messages', 'title', 'category');
         });
         resChat = res.body[0];
-        console.log("res body first",resChat);
         return ChatRoom.findById(resChat.id).exec();
       })
       .then(function(chat) {
         console.log("chat",chat);
-        //console.log("ughhhh", chat.title);
         resChat.users[0].username.should.equal(chat.users[0].username);
         resChat.messages[0].should.equal(chat.messages[0]);
         resChat.title.should.equal(chat.title);
