@@ -1,41 +1,51 @@
 'use strict';
 
 //////////////////////////////////////////////////////////////
-///////////////          State                  /////////////
+///////////////          Helper Functions       /////////////
 ////////////////////////////////////////////////////////////
-const appState ={
-  chatroomList:[],
-  categoryList:[]
-};
-function addToData(){
-  // const request = new Request('https://jabber-jam.herokuapp.com/chatrooms',{
-  //   method: 'POST',
-  //   mode:'cors',
-  //   headers: new Headers({
-  //     'Content-Type': ''
-  //   })
-  // }); 
-  fetch('https://jabber-jam.herokuapp.com/chatrooms',{
+function addToData(element){
+  const obj = {
+    title:element.find('#title').val(),
+    category:element.find('#category').val()
+  };
+  fetch('http://jabber-jam.herokuapp.com/chatrooms',{
     method: 'POST',
     mode:'cors',
     headers: new Headers({
       'Content-Type': 'application/json'
-    })
+    }),
+    body: JSON.stringify(obj)
   })
   .then(res=>{
-    console.log(res);
-    alert('ding ding');
+    if (!res.ok) {
+      return Promise.reject(res.statusText);
+    }
+    return res.json();
+  })
+  .then(resQ =>{
+    alert(`You have created the chatroom with the title ${resQ.title} and category ${resQ.category}`);
   }); 
 }
 //////////////////////////////////////////////////////////////
 ///////////////        State Modification       /////////////
 ////////////////////////////////////////////////////////////
 function addDataChatroom(state){
-  const request = new Request('https://jabber-jam.herokuapp.com/chatrooms',{
-    method: 'GET'
-  });
-  fetch(request).then(res=>{
-    
+
+  fetch('https://jabber-jam.herokuapp.com/chatrooms',{
+    method: 'GET',
+    mode:'cors',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  })
+  .then(res=>{
+    if (!res.ok) {
+      return Promise.reject(res.statusText);
+    }
+    return res.json();
+  })
+  .then(resQ=>{
+    state.chatroomList()
   });
 }
 //////////////////////////////////////////////////////////////
@@ -48,7 +58,7 @@ function addDataChatroom(state){
 function createChatroom(){
   $('.chatroom_form').on('submit',function(event){
     event.preventDefault();
-    addToData();
+    addToData($('.chatroom_form'));
     
   });
 }
