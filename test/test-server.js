@@ -19,12 +19,16 @@ function tearDownDb() {
   });
 }
 
+// var ObjectId = mongoose.Types.ObjectId;
+// var id1 = new ObjectId();
+
 const USER = {
   username: faker.internet.userName(),
   password: 'password',
   firstName: faker.name.firstName(),
   lastName: faker.name.lastName(),
-  email: faker.internet.email()
+  email: faker.internet.email(),
+  chatroomId:[]
 };
 
 function seedUser(){
@@ -32,6 +36,7 @@ function seedUser(){
     username: USER.username,
     firstName: USER.firstName,
     lastName: USER.lastName,
+    chatroomId: USER.chatroomId,
     email: USER.email
   };
   return User.hashPassword(USER.password)
@@ -60,7 +65,7 @@ describe('Testing root endpoint',function(){
     return chai.request(app)
       .get('/')
       .then(res => {
-        res.should.have.status(200);
+        res.should.be.status(200);
       });
   });
 });
@@ -94,7 +99,7 @@ describe('ChatRoom API resource', function(){
       .get('/chatrooms')
       .then(_res => {
         res = _res;
-        res.should.have.status(200);
+        res.should.be.status(200);
         res.body.length.should.be.at.least(1);
         return ChatRoom
         .find()
@@ -113,7 +118,7 @@ describe('ChatRoom API resource', function(){
       .request(app)
       .get('/chatrooms')
       .then(function(res) {
-        res.should.have.status(200);
+        res.should.be.status(200);
         res.should.be.json;
         res.body.should.be.a('array');
         res.body.length.should.be.at.least(1);
@@ -146,7 +151,7 @@ describe('ChatRoom API resource', function(){
       .post('/chatrooms')
       .send(newChat)
       .then(function(res){
-        res.should.have.status(201);
+        res.should.be.status(201);
         res.body.should.be.a('object');
         res.body.should.include.keys(['title','category','users','messages']);
         res.body.users.should.have.lengthOf(0);
@@ -188,7 +193,7 @@ describe('ChatRoom API resource', function(){
       .then(function(res){
         res.should.be.json;
         res.should.be.a('object');
-        res.should.have.status(201);
+        res.should.be.status(201);
         res.body.should.include.keys(['id','title','category','messages','users']);
         res.body.id.should.equal(updateChat.id);
         res.body.id.should.not.be.null;
@@ -225,7 +230,7 @@ describe('ChatRoom API resource', function(){
       .then(function(res){
         res.should.be.json;
         res.should.be.a('object');
-        res.should.have.status(201);
+        res.should.be.status(201);
         res.body.should.include.keys(['id','title','category','messages','users']);
         res.body.id.should.not.be.null;
         res.body.id.should.equal(updateObj.id);
@@ -302,6 +307,7 @@ describe('Users API resource', function(){
     return closeServer();
   });
   describe('Get endpoint for users',function(){
+    
     it('get all users',function(){
       let userResArr;
       return chai
@@ -310,7 +316,7 @@ describe('Users API resource', function(){
       .then(function(res){
         //console.log(res.body);
         res.should.be.json;
-        res.should.have.status(200);
+        res.should.be.status(200);
         res.body.should.have.length.of.at.least(1);
         res.body.should.be.a('array');
         res.body[0].should.be.a('object');
@@ -326,10 +332,70 @@ describe('Users API resource', function(){
       });
     });
     
+    it('should get the right fields',function(){
+      let userRes;
+      return chai
+      .request(app)
+      .get('/users')
+      .then(function(res){
+        res.should.be.status(200);
+        res.should.be.json;
+        res.body.should.be.a('array');
+        res.body[0].should.be.a('object');
+        res.body[0].should.include.keys(['username','fullName','email','ownChatRoom']);
+        res.body[0].username.should.not.be.null;
+        res.body[0].email.should.not.be.null;
+        userRes = res.body[0];
+        return User
+        .find({username:res.body[0].username})
+        .exec();
+      })
+      .then(function(user){
+        user[0].username.should.equal(userRes.username);
+        userRes.fullName.should.equal(`${user[0].firstName} ${user[0].lastName}`.trim());
+        user[0].email.should.equal(userRes.email);
+        for(let i = 0; i < user[0].chatroomId.length;i++){
+          user[0].chatroomId[i].should.equal(userRes.ownChatRoom[i]);
+        }
+      });
+    });
   });
   describe('Post endpoint for users',function(){
     it('should add a user',function(){
-
+      let userRes;
+      const newUser ={
+        username:'kek',
+        password:'life',
+        email:'kek@gmail.com',
+        firstName: 'Sen',
+        lastName: 'Mikimoto',
+      };
+      return chai
+      .request(app)
+      .post('/users')
+      .send(newUser)
+      .then(function(res){
+        res.should.be.json;
+        res.should.be.status(201);
+        res.body.should.be.a('object');
+        res.body.should.include.keys(['username','fullName','email','ownChatRoom']);
+        res.body.username.should.equal(newUser.username);
+        res.body.fullName.should.equal(`${newUser.firstName} ${newUser.lastName}`.trim());
+        res.body.email.should.equal(newUser.email);
+        res.body.ownChatRoom.should.have.lengthOf(0);
+        return User
+        .findOne({username:res.body.username})
+        .exec();
+      })
+      .then(function(dataRes){
+        dataRes.username.should.equal(newUser.username);
+        dataRes.lastName.should.equal(newUser.lastName);
+        dataRes.firstName.should.equal(newUser.firstName);
+        return dataRes.validatePassword(newUser.password);
+      })
+      .then(function(res){
+        res.should.equal(true);
+      });
     });
   });
 });
