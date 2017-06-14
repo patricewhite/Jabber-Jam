@@ -81,8 +81,8 @@ function cLoginAfterSignUp(state){
 ///////////////          Callback Function      /////////////
 ////////////////////////////////////////////////////////////
 $(function(event){
-  render(signUpLoginState, $('.container'));
-  changeToLogin(signUpLoginState);
-  changeToSignUp(signUpLoginState);
-  cLoginAfterSignUp(signUpLoginState);
+  render(appState, $('.container'));
+  changeToLogin(appState);
+  changeToSignUp(appState);
+  cLoginAfterSignUp(appState);
 });
