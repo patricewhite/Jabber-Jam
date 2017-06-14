@@ -282,3 +282,54 @@ describe('ChatRoom API resource', function(){
   });
 
 });
+describe('Users API resource', function(){
+
+  before(function() {
+    return runServer(TEST_DATABASE_URL);
+  });
+
+  beforeEach(function() {
+    return seedUser();
+  });
+
+  afterEach(function() {
+    // tear down database so we ensure no state from this test
+    // effects any coming after.
+    return tearDownDb();
+  });
+
+  after(function() {
+    return closeServer();
+  });
+  describe('Get endpoint for users',function(){
+    it('get all users',function(){
+      let userResArr;
+      return chai
+      .request(app)
+      .get('/users')
+      .then(function(res){
+        //console.log(res.body);
+        res.should.be.json;
+        res.should.have.status(200);
+        res.body.should.have.length.of.at.least(1);
+        res.body.should.be.a('array');
+        res.body[0].should.be.a('object');
+        userResArr = res.body;
+        return User
+        .find()
+        .count()
+        .exec();
+      })
+      .then(function(count){
+        console.log(userResArr,count);
+        userResArr.should.have.lengthOf(count);
+      });
+    });
+    
+  });
+  describe('Post endpoint for users',function(){
+    it('should add a user',function(){
+
+    });
+  });
+});
