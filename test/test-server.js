@@ -64,6 +64,7 @@ describe('Testing root endpoint',function(){
       });
   });
 });
+
 describe('ChatRoom API resource', function(){
 
   before(function() {
@@ -88,16 +89,19 @@ describe('ChatRoom API resource', function(){
     it('should return all exisitng chatrooms', function(){
 
       let res;
-      return chai.request(app)
+      return chai
+      .request(app)
       .get('/chatrooms')
       .then(_res => {
         res = _res;
         res.should.have.status(200);
         res.body.length.should.be.at.least(1);
-        return ChatRoom.find().count().exec();
+        return ChatRoom
+        .find()
+        .count()
+        .exec();
       })
       .then(count => {
-        console.log('count',count);
         res.body.should.have.lengthOf(count);
       });
     });
@@ -105,35 +109,92 @@ describe('ChatRoom API resource', function(){
     it('should return chats with the correct fields', function(){
 
       let resChat;
-      return chai.request(app)
+      return chai
+      .request(app)
       .get('/chatrooms')
       .then(function(res) {
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.a('array');
         res.body.length.should.be.at.least(1);
-
         res.body.forEach(function(chat) {
           chat.should.be.a('object');
           chat.should.include.key('id', 'users', 'messages', 'title', 'category');
         });
         resChat = res.body[0];
-        return ChatRoom.findById(resChat.id).exec();
+        return ChatRoom
+        .findById(resChat.id)
+        .exec();
       })
       .then(function(chat) {
-        console.log('chat',chat);
         resChat.users[0].username.should.equal(chat.users[0].username);
         resChat.messages[0].should.equal(chat.messages[0]);
         resChat.title.should.equal(chat.title);
         resChat.category.should.equal(chat.category);
       });
     });
-
-
-
   });
-
-
-
+  describe('Post endpoint for chatroom', function(){
+    it('posted object should be in database', function(){
+      let resChat;
+      const newChat = {
+        title:'kagami',
+        category: 'anime'
+      };
+      return chai
+      .request(app)
+      .post('/chatrooms')
+      .send(newChat)
+      .then(function(res){
+        res.should.have.status(201);
+        res.body.should.be.a('object');
+        res.body.should.include.keys(['title','category','users','messages']);
+        res.body.users.should.have.lengthOf(0);
+        res.body.messages.should.have.lengthOf(0);
+        res.body.id.should.not.be.null;
+        res.body.category.should.equal(newChat.category);
+        res.body.title.should.equal(newChat.title);
+        resChat = res.body;
+        return ChatRoom
+        .findById(res.body.id)
+        .exec();
+      })
+      .then(function(chat){
+        chat.id.should.equal(resChat.id);
+        chat.title.should.equal(resChat.title);
+        chat.category.should.equal(resChat.category);
+        chat.users.should.have.lengthOf(0);
+        chat.messages.should.have.lengthOf(0);
+      });
+    });
+  });
+  describe('Put endpoint for chatroom',function(){
+    it('should update title and category',function(){
+      let chat;
+    });
+  });
+  describe('Delete endpoint for chatroom',function(){
+    it('should delete a post by id',function(){
+      let chatroom;
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(chat){
+        chatroom = chat;
+        return chai
+        .request(app)
+        .delete(`/chatrooms/${chat.id}`);
+      })
+      .then(function(res){
+        res.should.have.status(204);
+        return ChatRoom
+        .findById(chatroom.id)
+        .exec();
+      })
+      .then(function(deleted){
+        should.not.exist(deleted);
+      });
+    });
+  });
 
 });
