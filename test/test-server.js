@@ -180,14 +180,12 @@ describe('ChatRoom API resource', function(){
       .exec()
       .then(function(resultChat){
         updateChat.id = resultChat.id;
-        console.log(updateChat);
         return chai
         .request(app)
         .put(`/chatrooms/${resultChat.id}`)
         .send(updateChat);
       })
       .then(function(res){
-        console.log(res.body);
         res.should.be.json;
         res.should.be.a('object');
         res.should.have.status(201);
@@ -198,7 +196,7 @@ describe('ChatRoom API resource', function(){
         res.body.category.should.equal(updateChat.category);
         chatRes = res.body;
         return ChatRoom
-        .findById(res.id)
+        .findById(res.body.id)
         .exec();
       })
       .then(function(chat){
