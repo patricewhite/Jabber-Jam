@@ -1,7 +1,7 @@
 'use strict';
 
 //////////////////////////////////////////////////////////////
-///////////////          Helper Functions       /////////////
+///////////////        Fetch Functions          /////////////
 ////////////////////////////////////////////////////////////
 /* add data to the database chatroom */
 function addToData(element){
@@ -25,11 +25,8 @@ function addToData(element){
   });
 }
 
-//////////////////////////////////////////////////////////////
-///////////////        State Modification       /////////////
-////////////////////////////////////////////////////////////
 /*getting chatroom documents from database*/
-function getDataChatroom(state){
+function getDataChatroom(){
   return fetch('https://jabber-jam.herokuapp.com/chatrooms',{
     method: 'GET',
     mode:'cors',
@@ -45,17 +42,8 @@ function getDataChatroom(state){
   });
 }
 
-/*filter chatrooms*/
-function filterChatroom(state,category, arr){
-  state.chatroomList = arr;
-  state.filterChatroomList = state.chatroomList.filter(el=>{
-    return el.category === category;
-  });
-  return state.filterChatroomList;
-}
-
 /*getting distinct category from the database*/
-function getDataCategory(state){
+function getDataCategory(){
   return fetch('https://jabber-jam.herokuapp.com/chatrooms/distinct',{
     method: 'GET',
     mode:'cors',
@@ -71,15 +59,94 @@ function getDataCategory(state){
   });
 }
 
-/* Main screen set bool value for show/hide */
-function showAndHideMain(state){
-  return (state.isMainScreen)?state.isMainScreen = false:state.isMainScreen = true;
+/*get chatroom by id */
+function getChatroomById(id){
+  return fetch(`https://jabber-jam.herokuapp.com/chatrooms/${id}`,{
+    method: 'GET',
+    mode:'cors',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  })
+  .then(res=>{
+    if (!res.ok) {
+      return Promise.reject(res.statusText);
+    }
+    return res.json();
+  });
 }
+
+/*Get the messages of this chatroom document from the database  */
+function getMessages(state){
+  return fetch(`https://jabber-jam.herokuapp.com/chatrooms/${state.chatId}`, {
+    method: 'GET',
+    mode: 'cors',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+  })
+  .then(res => {
+    if(!res.ok) {
+      return Promise.reject(res.statusText);
+    }
+    return res.json();
+  });
+}
+
+/* adding updated messages to db*/
+function addMessagesToDb(state,message){
+  state.sentMessages.push(message);
+  const object = {
+    id: state.chatId,
+    messages:state.sentMessages
+  };
+  return fetch(`https://jabber-jam.herokuapp.com/chatrooms/${state.chatId}`, {
+    method: 'PUT',
+    mode: 'cors',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify(object)
+  })
+  .then(res => {
+    if(!res.ok) {
+      return Promise.reject(res.statusText);
+    }
+    return res.json();
+  });
+}
+
+//////////////////////////////////////////////////////////////
+///////////////        State Modification       /////////////
+////////////////////////////////////////////////////////////
+/*filter chatrooms*/
+function filterChatroom(state,category, arr){
+  state.chatroomList = arr;
+  state.filterChatroomList = state.chatroomList.filter(el=>{
+    return el.category === category;
+  });
+  return state.filterChatroomList;
+}
+
+/*checks if we are in the main screen or not */
+function showAndHideMain(state){
+  return (state.isMainScreen)? state.isMainScreen = false : state.isMainScreen = true;
+}
+
+function setSentMsgToRes(state,res){
+  state.sentMessages = res.messages;
+}
+
+function setUserId(state){
+  state.userId = Math.floor(Math.random()*100);
+}
+
 //////////////////////////////////////////////////////////////
 ///////////////          Render                 /////////////
 ////////////////////////////////////////////////////////////
 /*render the page*/
-function render(state,chatroomElement,categoryElement){
+function render(state,chatroomElement,categoryElement,hideChatElement){
+  hideChatroom(hideChatElement);
   Promise.all([renderCategoryList(state,categoryElement),
     renderChatroomList(state, chatroomElement)]);
 }
@@ -121,6 +188,53 @@ function renderCategoryList(state,element){
   });
 }
 
+function renderChatroom(state,element){
+  getChatroomById(element.attr('data-id'))
+  .then(resQ =>{
+    console.log(resQ);
+    state.chatId = resQ.id;
+    state.sentMessages = resQ.messages;
+    state.title = resQ.title;
+    state.category = resQ.category;
+    renderRecievedMessages(appState, $('.conversation'));
+    $('.main_hide_show').hide();
+    $('.single_chatroom').show();
+  });
+}
+
+/*hides chatroom screen*/
+function hideChatroom(element){
+  element.hide();
+}
+
+/*Initial chatroom messages */
+function renderRecievedMessages(state,element){
+  getMessages(state)
+  .then(resM => {
+    setUserId(state);
+    setSentMsgToRes(state,resM);
+    let message;
+    if(state.sentMessages.length > 0){
+      message = state.sentMessages.map(el => {
+        return `<li>${state.userId}: ${el}</li>`;
+      }).join('\n');
+    }
+    element.html(message);
+  });
+}
+
+/* after you send the message, render the chatroom message */
+function renderUpdatedMessages(state,sentElement,messageElement){
+  addMessagesToDb(state,sentElement.val())
+  .then(resUpd=>{
+    setSentMsgToRes(state,resUpd);
+    const message = state.sentMessages.map(el => {
+      return `<li>${state.userId}: ${el}</li>`;
+    }).join('\n');
+    messageElement.html(message);   
+  });
+}
+
 //////////////////////////////////////////////////////////////
 ///////////////          Event Listeners        /////////////
 ////////////////////////////////////////////////////////////
@@ -131,7 +245,7 @@ function createChatroom(state){
     addToData($('.chatroom_form'))
     .then((resQ)=>{
       alert(`You have created the chatroom with the title ${resQ.title} and category ${resQ.category}`);
-      render(state,$('.list_chatroom'),$('.category_list'));
+      render(state,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));
     });
   });
 }
@@ -154,8 +268,29 @@ function showAllChatrooms(state){
 function hideMainScreen(state){
   $('.list_chatroom').on('click','li',function(event){
     showAndHideMain(state);
-    $('.main_hide_show').hide();
-    $('.single_chatroom').show();
+    renderChatroom(state,$(this));
+  });
+}
+
+/*update the chatroom message once you click */
+function updChatroomMsgClick(state){
+  $('#button').on('click',function(event){
+    event.preventDefault();
+    renderUpdatedMessages(state,$('#text'),$('.conversation'));
+    $('#text').val('');
+  });
+}
+
+/*update the chatroom message once you click */
+function updChatroomMsgEnter(state){
+  $('.messages').keypress(function (e) {
+    var key = e.which;
+    if(key === 13)  // the enter key code
+    {
+      event.preventDefault();
+      renderUpdatedMessages(state,$('#text'),$('.conversation'));
+      $('#text').val('');
+    }
   });
 }
 
@@ -163,9 +298,11 @@ function hideMainScreen(state){
 ///////////////          Callback Function      /////////////
 ////////////////////////////////////////////////////////////
 $(function(){
-  render(appState,$('.list_chatroom'),$('.category_list'));
+  render(appState,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));
   createChatroom(appState);
   showFilterChatroom(appState);
   showAllChatrooms(appState);
   hideMainScreen(appState);
+  updChatroomMsgClick(appState);
+  updChatroomMsgEnter(appState);
 });

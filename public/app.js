@@ -13,6 +13,9 @@ const appState ={
   filterChatroomList:[],
   //chatroom.js
   sentMessages: [],
+  title: '',
+  category: '',
   chatId: '',
-  isMainScreen:true
+  isMainScreen:true,
+  userId: 0
 };
