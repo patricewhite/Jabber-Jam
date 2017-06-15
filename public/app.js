@@ -16,6 +16,5 @@ const appState ={
   title: '',
   category: '',
   chatId: '',
-  isMainScreen:true,
   userId: 0
 };

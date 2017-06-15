@@ -5,6 +5,7 @@
   width: 70%;
   margin-left: 250px;
   background-color: white;
+  overflow-y:auto;
 }
 
 .messages {

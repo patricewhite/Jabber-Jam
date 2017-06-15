@@ -128,11 +128,6 @@ function filterChatroom(state,category, arr){
   return state.filterChatroomList;
 }
 
-/*checks if we are in the main screen or not */
-function showAndHideMain(state){
-  return (state.isMainScreen)? state.isMainScreen = false : state.isMainScreen = true;
-}
-
 function setSentMsgToRes(state,res){
   state.sentMessages = res.messages;
 }
@@ -267,7 +262,6 @@ function showAllChatrooms(state){
 /*hide mainscreen */
 function hideMainScreen(state){
   $('.list_chatroom').on('click','li',function(event){
-    showAndHideMain(state);
     renderChatroom(state,$(this));
   });
 }
