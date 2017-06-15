@@ -52,8 +52,8 @@
 .chatbox {
   top: 100px;
   position: relative;
-  height: 500px;
-  width: 70%;
+  height: 300px;
+  width: 60%;
   margin-left: 250px;
   background-color: white;
   overflow-y:auto;
@@ -78,7 +78,7 @@
 
 /*text input*/
 #text {
-  width: 1000px;
+  width: 700px;
   height: 30px;
 }
 
