@@ -3,12 +3,42 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 const mongoose = require('mongoose');
-
-const{ChatRoom} = require('../models/chatroom');
+const passport = require('passport');
+const BasicStrategy = require('passport-http').BasicStrategy;
+const{ChatRoom,User} = require('../models/chatroom');
 router.use(jsonParser);
 
+const basicStrategy = new BasicStrategy((username, password, callback) => {
+  let user;
+
+  User
+.findOne({username: username})
+.exec()
+.then(_user => {
+  user = _user;
+
+  if (!user) {
+    return callback(null, false, {message: 'Incorrect username'});
+
+  }
+  return user.validatePassword(password);
+})
+.then(isValid => {
+  if (!isValid) {
+    return callback(null, false, {message: 'Incorrect password'});
+  }
+  else {
+    return callback(null, user);
+  }
+});
+});
+
+passport.use(basicStrategy);
+router.use(passport.initialize());
+
+
 ////////////////////// Post for ChatRoom ////////////////////////
-router.post('/',(req,res) => {
+router.post('/', passport.authenticate('basic', {session: false}), (req,res) => {
   const requiredFields = ['title', 'category'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -81,7 +111,7 @@ router.get('/:id', (req, res) => {
 
 ////////////////////PUT for ChatRoom /////////////////////////
 
-router.put('/:id', (req, res) => {
+router.put('/:id', passport.authenticate('basic', {session: false}), (req, res) => {
   if(!(req.params.id === req.body.id)){
     const message = (`Request path id (${req.params.id}) and request body id
       (${req.body.id}) must match`);
@@ -94,12 +124,7 @@ router.put('/:id', (req, res) => {
 
   updateableFields.forEach(field => {
     if( field in req.body) {
-      // if(field == 'messages'){
-      //   req.body.messages.push(field);
-      //   toUpdate[field] = req.body.messages;
-      // }else{
         toUpdate[field] = req.body[field];
-      // }
     }
   });
   ChatRoom
@@ -111,7 +136,7 @@ router.put('/:id', (req, res) => {
 
 /////////////////////DELETE for ChatRoom /////////////////////////
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', passport.authenticate('basic', {session: false}), (req, res) => {
   ChatRoom
     .findByIdAndRemove(req.params.id)
     .exec()

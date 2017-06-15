@@ -171,6 +171,7 @@ describe('ChatRoom API resource', function(){
       return chai
       .request(app)
       .post('/chatrooms')
+      .auth(USER.username, USER.password)
       .send(newChat)
       .then(function(res){
         res.should.be.status(201);
@@ -194,6 +195,47 @@ describe('ChatRoom API resource', function(){
         chat.messages.should.have.lengthOf(0);
       });
     });
+
+    it('should reject creating chatroom with no credentials', function(){
+      const newChat = {
+        title:'kagami',
+        category: 'anime'
+      };
+      return chai.request(app)
+          .post('/chatrooms')
+          .send(newChat)
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
+
+    it('should reject creating chatroom with wrong username', function(){
+      const newChat = {
+        title:'kagami',
+        category: 'anime'
+      };
+      return chai.request(app)
+          .post('/chatrooms')
+          .auth(faker.internet.userName(), USER.password)
+          .send(newChat)
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
+
+    it('should reject creating chatroom with wrong password', function(){
+      const newChat = {
+        title:'kagami',
+        category: 'anime'
+      };
+      return chai.request(app)
+          .post('/chatrooms')
+          .auth(USER.username, faker.lorem.words())
+          .send(newChat)
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
   });
   describe('Put endpoint for chatroom',function(){
     it('should update title and category',function(){
@@ -210,6 +252,7 @@ describe('ChatRoom API resource', function(){
         return chai
         .request(app)
         .put(`/chatrooms/${resultChat.id}`)
+        .auth(USER.username, USER.password)
         .send(updateChat);
       })
       .then(function(res){
@@ -236,7 +279,7 @@ describe('ChatRoom API resource', function(){
     it('should update users and messages',function(){
       let chatRes;
       const updateObj ={
-        users:[{username:'hiPatrice'},{username:'wassup101'}],
+        users:[{username:USER.username},{username:'wassup101'}],
         messages:{
           message:'lol',
           id:6
@@ -250,6 +293,7 @@ describe('ChatRoom API resource', function(){
         return chai
         .request(app)
         .put(`/chatrooms/${resultChat.id}`)
+        .auth(USER.username, USER.password)
         .send(updateObj);
       })
       .then(function(res){
@@ -282,6 +326,98 @@ describe('ChatRoom API resource', function(){
         chat.messages[0].id.should.deep.equal(chatRes.messages[0].id);
       });
     });
+
+    // it('should reject updating title & category with no credentials', function(){
+    //   const newChat = {
+    //     title:'kagami',
+    //     category: 'anime'
+    //   };
+    //   return chai.request(app)
+    //       .put(`/chatrooms/${resultChat.id}`)
+    //       .send(newChat)
+    //       .catch(function(res) {
+    //         res.should.have.status(401);
+    //       });
+    // });
+
+    // it('should reject updating title & category with wrong username', function(){
+    //   const newChat = {
+    //     title:'kagami',
+    //     category: 'anime'
+    //   };
+    //   return chai.request(app)
+    //       .put(`/chatrooms/${resultChat.id}`)
+    //       .auth(faker.internet.userName(), USER.password)
+    //       .send(newChat)
+    //       .catch(function(res) {
+    //         res.should.have.status(401);
+    //       });
+    // });
+    //
+    // it('should reject updating title & category with wrong password', function(){
+    //   const newChat = {
+    //     title:'kagami',
+    //     category: 'anime'
+    //   };
+    //   return chai.request(app)
+    //       .put(`/chatrooms/${resultChat.id}`)
+    //       .auth(USER.username, faker.lorem.words())
+    //       .send(newChat)
+    //       .catch(function(res) {
+    //         res.should.have.status(401);
+    //       });
+    // });
+    //
+    // it('should reject updating messages & users with no credentials', function(){
+    //   const updateObj ={
+    //     users:[{username:USER.username},{username:'wassup101'}],
+    //     messages:{
+    //       message:'lol',
+    //       id:6
+    //     }
+    //   };
+    //   return chai.request(app)
+    //       .put(`/chatrooms/${resultChat.id}`)
+    //       .send(updateObj)
+    //       .catch(function(res) {
+    //         res.should.have.status(401);
+    //       });
+    // });
+
+    // it('should reject updating messages & users with wrong username', function(){
+    //   const updateObj ={
+    //     users:[{username:USER.username},{username:'wassup101'}],
+    //     messages:{
+    //       message:'lol',
+    //       id:6
+    //     }
+    //   };
+    //   return chai.request(app)
+    //       .put(`/chatrooms/${resultChat.id}`)
+    //       .auth(faker.internet.userName(), USER.password)
+    //       .send(updateObj)
+    //       .catch(function(res) {
+    //         res.should.have.status(401);
+    //       });
+    // });
+    //
+    // it('should reject updating messages & users with wrong password', function(){
+    //   const updateObj ={
+    //     users:[{username:USER.username},{username:'wassup101'}],
+    //     messages:{
+    //       message:'lol',
+    //       id:6
+    //     }
+    //   };
+    //   return chai.request(app)
+    //       .put(`/chatrooms/${resultChat.id}`)
+    //       .auth(USER.username, faker.lorem.words())
+    //       .send(updateObj)
+    //       .catch(function(res) {
+    //         res.should.have.status(401);
+    //       });
+    // });
+
   });
   describe('Delete endpoint for chatroom',function(){
     it('should delete a post by id',function(){
@@ -293,7 +429,8 @@ describe('ChatRoom API resource', function(){
         chatroom = chat;
         return chai
         .request(app)
-        .delete(`/chatrooms/${chat.id}`);
+        .delete(`/chatrooms/${chat.id}`)
+        .auth(USER.username, USER.password)
       })
       .then(function(res){
         res.should.have.status(204);
@@ -305,8 +442,54 @@ describe('ChatRoom API resource', function(){
         should.not.exist(deleted);
       });
     });
-  });
 
+    it('should reject deleting chatroom with no credentials', function(){
+      let chatroom;
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(chat){
+        chatroom = chat;
+      return chai.request(app)
+          .delete(`/chatrooms/${chat.id}`)
+        })
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
+
+    it('should reject deleting chatroom with wrong username', function(){
+      let chatroom;
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(chat){
+        chatroom = chat;
+      return chai.request(app)
+          .delete(`/chatrooms/${chat.id}`)
+          .auth(faker.internet.userName(), USER.password)
+        })
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
+
+    it('should reject creating chatroom with wrong password', function(){
+      let chatroom;
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(chat){
+        chatroom = chat;
+      return chai.request(app)
+          .delete(`/chatrooms/${chat.id}`)
+          .auth(USER.username, faker.lorem.words())
+        })
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
+  });
 });
 describe('Users API resource', function(){
 

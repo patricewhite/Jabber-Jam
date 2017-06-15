@@ -7,6 +7,8 @@ const chatRouter = require('./routes/chatRoutes');
 const {DATABASE_URL, PORT} = require('./config');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const passport = require('passport');
+const BasicStrategy = require('passport-http').BasicStrategy;
 
 mongoose.Promise = global.Promise;
 
