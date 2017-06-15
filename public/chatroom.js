@@ -28,49 +28,59 @@
         return res.json();
       });
     },
-    createMessages: function(state){
+    createMessages: function(state, message){
+      console.log('message', message);
+      if(state != undefined){
+      const object = {
+        id: "59406dcccb46821720c90b29",
+        users: [],
+        messages:state.sentMessages.push(message),
+        title: " ",
+        category: " "
+
+      }
       return fetch('https://jabber-jam.herokuapp.com/chatrooms/59406dcccb46821720c90b29', {
-        method: 'POST',
+        method: 'PUT',
         mode: 'cors',
         headers: new Headers({
           'Content-Type': "application/json"
         }),
         body: JSON.stringify(object)
       })
-      then(res => {
+      .then(res => {
         if(!res.ok) {
           return Promise.reject(res.statusText);
         }
         return res.json();
       });
+    }
     },
     //render function
     renderRecievedMessages: function(state, element){
       client.getMessages(state)
       .then(resM => {
         console.log(resM);
-        state.sentMessages = resM.messages;
-        console.log(state.sentMessages);
-        const message = state.sentMessages.map(el => {
-          return `<li>${el}</li>`;
-        }).join('\n');
-        element.html(message);
+        //if(!state === undefined) {
+          state.sentMessages = resM.messages;
+          console.log(state.sentMessages);
+          const message = state.sentMessages.map(el => {
+            return `<li>${el}</li>`;
+          }).join('\n');
+          element.html(message);
+        //}
       });
     },
-    renderSentMessages: function(state, element){
-      client.createMessages(state)
-      const object = {
-        messages:[ ]
-      }
+    renderSentMessages: function(state, element,message){
+      //console.log(state)
+      client.createMessages(state, message)
     },
     //eventlistener
     watchSubmit: function(){
-      $('#button').click( function(event){
-        console.log('heyddddd');
+      $('button').click( function(event){
         event.preventDefault();
-        const message = $('#text').val();
+        const message = $('input').val();
         console.log("from chat",message)
-        //renderSentMessages(appState, $('.conversation'));
+        client.renderSentMessages(appState, $('.conversation'), message);
       })
 
     }
