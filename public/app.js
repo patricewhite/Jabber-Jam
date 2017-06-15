@@ -16,5 +16,5 @@ const appState ={
   title: '',
   category: '',
   chatId: '',
-  userId: 0
+  userId: 0,
 };

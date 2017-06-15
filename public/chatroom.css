@@ -1,3 +1,54 @@
+/*****************************************************************************
+                  Delete Chatroom and Update Title and Category
+******************************************************************************/
+/*delete update block ul elements*/
+.delete_update{
+  list-style-type: none;
+  position: relative;
+  top: 90px;  
+}
+
+/*delete update block li elements*/
+.delete_update li{
+  border: 1px solid black;
+  padding: 10px;
+  list-style-type: none;
+  margin-left:15%;
+  width:40%;
+  text-align:center;
+}
+
+/*update title block*/
+.updT{
+  margin-bottom: 10px; 
+  display:inline-block;
+}
+
+/*update title text box*/
+#updateTitle{
+  display:inline-block;
+  margin-left: 40px;
+  width: 300px;
+}
+
+/*update Category block*/
+.updCat{
+  margin-bottom: 10px;
+  display:inline-block;
+}
+
+/*update category text box*/
+#updateCat{
+  display:inline-block;
+  margin-left: 40px;
+  width: 300px;
+}
+
+
+/*****************************************************************************
+                              Chat box
+******************************************************************************/
+/*Entire chat block*/
 .chatbox {
   top: 100px;
   position: relative;
@@ -8,6 +59,15 @@
   overflow-y:auto;
 }
 
+/*chat messages*/
+.conversation {
+  list-style: none;
+}
+
+/*****************************************************************************
+                          Form Stuff for Chatbox
+******************************************************************************/
+/*Entire messages form*/
 .messages {
   top: 100px;
   padding-top: 10px;
@@ -16,16 +76,15 @@
   margin-left: 235px;
 }
 
+/*text input*/
 #text {
   width: 1000px;
   height: 30px;
 }
 
+/*button click*/
 #button {
   width: 100px;
   height: 30px;
 }
 
-ul {
-  list-style: none;
-}
