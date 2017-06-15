@@ -327,96 +327,132 @@ describe('ChatRoom API resource', function(){
       });
     });
 
-    // it('should reject updating title & category with no credentials', function(){
-    //   const newChat = {
-    //     title:'kagami',
-    //     category: 'anime'
-    //   };
-    //   return chai.request(app)
-    //       .put(`/chatrooms/${resultChat.id}`)
-    //       .send(newChat)
-    //       .catch(function(res) {
-    //         res.should.have.status(401);
-    //       });
-    // });
+    it('should reject updating title & category with no credentials', function(){
+      const updateChat = {
+        title:'kagami',
+        category: 'anime'
+      };
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(resultChat){
+        updateChat.id = resultChat.id;
+      return chai.request(app)
+          .put(`/chatrooms/${resultChat.id}`)
+          .send(updateChat)
+        })
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
 
-    // it('should reject updating title & category with wrong username', function(){
-    //   const newChat = {
-    //     title:'kagami',
-    //     category: 'anime'
-    //   };
-    //   return chai.request(app)
-    //       .put(`/chatrooms/${resultChat.id}`)
-    //       .auth(faker.internet.userName(), USER.password)
-    //       .send(newChat)
-    //       .catch(function(res) {
-    //         res.should.have.status(401);
-    //       });
-    // });
-    //
-    // it('should reject updating title & category with wrong password', function(){
-    //   const newChat = {
-    //     title:'kagami',
-    //     category: 'anime'
-    //   };
-    //   return chai.request(app)
-    //       .put(`/chatrooms/${resultChat.id}`)
-    //       .auth(USER.username, faker.lorem.words())
-    //       .send(newChat)
-    //       .catch(function(res) {
-    //         res.should.have.status(401);
-    //       });
-    // });
-    //
-    // it('should reject updating messages & users with no credentials', function(){
-    //   const updateObj ={
-    //     users:[{username:USER.username},{username:'wassup101'}],
-    //     messages:{
-    //       message:'lol',
-    //       id:6
-    //     }
-    //   };
-    //   return chai.request(app)
-    //       .put(`/chatrooms/${resultChat.id}`)
-    //       .send(updateObj)
-    //       .catch(function(res) {
-    //         res.should.have.status(401);
-    //       });
-    // });
+    it('should reject updating title & category with wrong username', function(){
+      const updateChat = {
+        title:'kagami',
+        category: 'anime'
+      };
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(resultChat){
+        updateChat.id = resultChat.id;
+      return chai.request(app)
+          .put(`/chatrooms/${resultChat.id}`)
+          .auth(faker.internet.userName(), USER.password)
+          .send(updateChat)
+        })
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
 
-    // it('should reject updating messages & users with wrong username', function(){
-    //   const updateObj ={
-    //     users:[{username:USER.username},{username:'wassup101'}],
-    //     messages:{
-    //       message:'lol',
-    //       id:6
-    //     }
-    //   };
-    //   return chai.request(app)
-    //       .put(`/chatrooms/${resultChat.id}`)
-    //       .auth(faker.internet.userName(), USER.password)
-    //       .send(updateObj)
-    //       .catch(function(res) {
-    //         res.should.have.status(401);
-    //       });
-    // });
-    //
-    // it('should reject updating messages & users with wrong password', function(){
-    //   const updateObj ={
-    //     users:[{username:USER.username},{username:'wassup101'}],
-    //     messages:{
-    //       message:'lol',
-    //       id:6
-    //     }
-    //   };
-    //   return chai.request(app)
-    //       .put(`/chatrooms/${resultChat.id}`)
-    //       .auth(USER.username, faker.lorem.words())
-    //       .send(updateObj)
-    //       .catch(function(res) {
-    //         res.should.have.status(401);
-    //       });
-    // });
+    it('should reject updating title & category with wrong password', function(){
+      const updateChat = {
+        title:'kagami',
+        category: 'anime'
+      };
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(resultChat){
+        updateChat.id = resultChat.id;
+      return chai.request(app)
+          .put(`/chatrooms/${resultChat.id}`)
+          .auth(USER.username, faker.lorem.words())
+          .send(updateChat)
+        })
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
+
+    it('should reject updating messages & users with no credentials', function(){
+      const updateObj ={
+        users:[{username:USER.username},{username:'wassup101'}],
+        messages:{
+          message:'lol',
+          id:6
+        }
+      };
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(resultChat){
+        updateObj.id = resultChat.id;
+      return chai.request(app)
+          .put(`/chatrooms/${resultChat.id}`)
+          .send(updateObj)
+        })
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
+
+    it('should reject updating messages & users with wrong username', function(){
+      const updateObj ={
+        users:[{username:USER.username},{username:'wassup101'}],
+        messages:{
+          message:'lol',
+          id:6
+        }
+      };
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(resultChat){
+        updateObj.id = resultChat.id;
+      return chai.request(app)
+          .put(`/chatrooms/${resultChat.id}`)
+          .auth(faker.internet.userName(), USER.password)
+          .send(updateObj)
+        })
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
+
+    it('should reject updating messages & users with wrong password', function(){
+      const updateObj ={
+        users:[{username:USER.username},{username:'wassup101'}],
+        messages:{
+          message:'lol',
+          id:6
+        }
+      };
+      return ChatRoom
+      .findOne()
+      .exec()
+      .then(function(resultChat){
+        updateObj.id = resultChat.id;
+      return chai.request(app)
+          .put(`/chatrooms/${resultChat.id}`)
+          .auth(USER.username, faker.lorem.words())
+          .send(updateObj)
+        })
+          .catch(function(res) {
+            res.should.have.status(401);
+          });
+    });
 
   });
   describe('Delete endpoint for chatroom',function(){
