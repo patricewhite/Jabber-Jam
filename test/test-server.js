@@ -51,7 +51,9 @@ function seedChatroom(){
   for (let i =1; i <= 10; i++){
     seedData.push({
       users: [{username: faker.internet.userName()}],
-      messages: [faker.lorem.sentence()],
+      messages: {
+        message: faker.lorem.sentence()
+      },
       title: faker.lorem.words(),
       category: faker.lorem.words()
     });
@@ -133,7 +135,8 @@ describe('ChatRoom API resource', function(){
       })
       .then(function(chat) {
         resChat.users[0].username.should.equal(chat.users[0].username);
-        resChat.messages[0].should.equal(chat.messages[0]);
+        resChat.messages[0].message.should.equal(chat.messages[0].message);
+        //resChat.messages[0]._id.should.equal(chat.messages[0]._id);
         resChat.title.should.equal(chat.title);
         resChat.category.should.equal(chat.category);
       });
@@ -234,7 +237,10 @@ describe('ChatRoom API resource', function(){
       let chatRes;
       const updateObj ={
         users:[{username:'hiPatrice'},{username:'wassup101'}],
-        messages:['lol','hi','bye']
+        messages:{
+          message:'lol',
+          id:6
+        }
       };
       return ChatRoom
       .findOne()
@@ -257,10 +263,8 @@ describe('ChatRoom API resource', function(){
         for(let i =0;i<res.body.users.length;i++){
           res.body.users[i].username.should.be.equal(updateObj.users[i].username);
         }
-        res.body.messages.should.have.lengthOf(3);
-        for(let i =0;i<res.body.messages.length;i++){
-          res.body.messages[i].should.be.equal(updateObj.messages[i]);
-        }
+        res.body.messages[0].message.should.have.lengthOf(3);
+        res.body.messages[0].id.should.equal(updateObj.messages.id);
         chatRes = res.body;
         return ChatRoom
         .findById(res.body.id)
@@ -274,10 +278,8 @@ describe('ChatRoom API resource', function(){
         for(let i =0;i<chat.users.length;i++){
           chat.users[i].username.should.be.equal(chatRes.users[i].username);
         }
-        chat.messages.should.have.lengthOf(3);
-        for(let i =0;i<chat.messages.length;i++){
-          chat.messages[i].should.be.equal(chatRes.messages[i]);
-        }
+        chat.messages[0].message.should.have.lengthOf(3);
+        chat.messages[0].id.should.deep.equal(chatRes.messages[0].id);
       });
     });
   });

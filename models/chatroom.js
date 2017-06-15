@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 ///////////////////////////////////////////////////////////////////////////////////
 const chatRoomSchema = mongoose.Schema({
   users:[{username:String}],
-  messages:[String],
+  messages:[{id:Number, message:String}],
   title:{type:String, required:true},
   category:{type:String,required:true}
 });

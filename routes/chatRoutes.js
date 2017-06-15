@@ -83,18 +83,23 @@ router.get('/:id', (req, res) => {
 
 router.put('/:id', (req, res) => {
   if(!(req.params.id === req.body.id)){
-    const message = (`Request path id (${req.params.id}) and reques body id
+    const message = (`Request path id (${req.params.id}) and request body id
       (${req.body.id}) must match`);
     console.error(message);
     res.status(400).json({message: message});
   }
 
   const toUpdate = {};
-  const updateableFields = ['title', 'category', 'messages', 'users'];
+  const updateableFields = ['title', 'category','messages', 'users'];
 
   updateableFields.forEach(field => {
     if( field in req.body) {
-      toUpdate[field] = req.body[field];
+      // if(field == 'messages'){
+      //   req.body.messages.push(field);
+      //   toUpdate[field] = req.body.messages;
+      // }else{
+        toUpdate[field] = req.body[field];
+      // }
     }
   });
   ChatRoom
