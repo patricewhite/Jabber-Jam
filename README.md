@@ -33,7 +33,7 @@ When you signup, you go to log in screen<br/>
 
 #### Login Screen <br/>
 When you login, you go to main screen<br/>
-![LogIn](images/JabberJamLogin.png "Login Screen")<br/>
+![LogIn](images/JabberJamLogIn.png "Login Screen")<br/>
 
 #### MainScreen <br/>
 This screen shows all chatrooms and all categories. You can also create chatroom from this screen.
