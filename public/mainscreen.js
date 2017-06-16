@@ -1,5 +1,5 @@
 'use strict';
-
+//var base64js = require('base64-js')
 //////////////////////////////////////////////////////////////
 ///////////////        Fetch Functions          /////////////
 ////////////////////////////////////////////////////////////
@@ -9,11 +9,16 @@ function addToData(element){
     title:element.find('#title').val(),
     category:element.find('#category').val()
   };
+
+  let username = 'loco4';
+  let password = 'dance';
+
   return fetch('https://jabber-jam.herokuapp.com/chatrooms',{
     method: 'POST',
     mode:'cors',
     headers: new Headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization':'Basic ' + btoa(username + ":" + password)
     }),
     body: JSON.stringify(obj)
   })
@@ -100,11 +105,16 @@ function addMessagesToDb(state,message){
     id: state.chatId,
     messages:state.sentMessages
   };
+
+  let username = 'loco4';
+  let password = 'dance';
+
   return fetch(`https://jabber-jam.herokuapp.com/chatrooms/${state.chatId}`, {
     method: 'PUT',
     mode: 'cors',
     headers: new Headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization':'Basic ' + btoa(username + ":" + password)
     }),
     body: JSON.stringify(object)
   })
@@ -226,7 +236,7 @@ function renderUpdatedMessages(state,sentElement,messageElement){
     const message = state.sentMessages.map(el => {
       return `<li>${state.userId}: ${el}</li>`;
     }).join('\n');
-    messageElement.html(message);   
+    messageElement.html(message);
   });
 }
 
