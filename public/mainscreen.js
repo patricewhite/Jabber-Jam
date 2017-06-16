@@ -76,7 +76,7 @@ function getChatroomById(id){
   });
 }
 
-/* adding updated messages,title, and category to db*/
+/* update messages in db*/
 function addMsgToDb(state,message){
   state.sentMessages.push({id:state.userId,message:message});
   const object = {
@@ -100,6 +100,7 @@ function addMsgToDb(state,message){
   });
 }
 
+/*update the category in the DB */
 function addCatToDb(state,category){
   state.category = category;
   const object ={
@@ -123,6 +124,7 @@ function addCatToDb(state,category){
   });
 }
 
+/*update the title in the DB */
 function addTitleToDb(state,title){
   state.title = title;
   const object ={
@@ -146,6 +148,8 @@ function addTitleToDb(state,title){
   });
 }
 
+/*Delete the chatroom from the database and
+  go back to the main screen */
 function deleteFromDb(state){
   return fetch(`https://jabber-jam.herokuapp.com/chatrooms/${state.chatId}`, {
     method: 'DELETE',
@@ -157,10 +161,11 @@ function deleteFromDb(state){
   .then(()=>{
     alert(`You have deleted the chatroom with title ${state.title} with category ${state.category}`);
     renderHideMainShowChat(state,$('.main_hide_show'),$('.single_chatroom'));
-    render(state,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));
+    mainScreenInit(state,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));
   });
 }
 
+/*Set the title category value to the title category value */
 function setTitleValue(state,sentElement,titleElement){
   addTitleToDb(state,sentElement.val())
   .then(resUpd=>{
@@ -169,14 +174,7 @@ function setTitleValue(state,sentElement,titleElement){
   });
 }
 
-function setCatValue(state,sentElement,titleElement){
-  addCatToDb(state,sentElement.val())
-  .then(resUpd=>{
-    setStateToUpdCat(state,resUpd);
-    renderUpdTitleCat(state,titleElement);
-  });
-}
-
+/*Initialize the chatroom page */
 function initChatroom(state,element){
   getChatroomById(element.attr('data-id'))
   .then(resQ =>{
@@ -186,6 +184,58 @@ function initChatroom(state,element){
   });
 }
 
+/*Main Screen Init*/
+function  mainScreenInit(state,chatroomElement,categoryElement,hideChatElement){
+  hideChatroom(hideChatElement);
+  Promise.all([showDistinctChatroom(state,categoryElement),
+    showFilteredOrAllChatrooms(state, chatroomElement)]);
+}
+
+/* show all the distinct category */
+function showDistinctChatroom(state,element){
+  getDataCategory(state)
+  .then(resQ =>{
+    state.categoryList = resQ;
+    renderCategoryList(state,element);
+  });
+}
+
+/* show all chatrooms or filtered chatroom list */
+function showFilteredOrAllChatrooms(state,chatroomElement,categoryElement){
+  getDataChatroom(state)
+  .then(resQ=>{
+    let chatroomArr;
+    if(!categoryElement){
+      state.chatroomList = resQ;
+      chatroomArr = state.chatroomList;
+    }else{
+      chatroomArr = filterChatroom(state, categoryElement.text(),resQ);
+    }
+    renderChatroomList(state,chatroomElement,chatroomArr);
+  });
+}
+
+/*Set the updated category value to the state category value */
+function setCatValue(state,sentElement,titleElement){
+  addCatToDb(state,sentElement.val())
+  .then(resUpd=>{
+    setStateToUpdCat(state,resUpd);
+    renderUpdTitleCat(state,titleElement);
+  });
+}
+
+/* after you send the message, render the chatroom message */
+function setUpdatedMessages(state,sentVal,messageElement){
+  getChatroomById(state.chatId)
+  .then(resGet=>{
+    setSentMsgToRes(state,resGet);
+    return addMsgToDb(state,sentVal);
+  })
+  .then(resUpd=>{
+    setSentMsgToRes(state,resUpd);
+    renderChatroomMessages(state,messageElement); 
+  });
+}
 
 //////////////////////////////////////////////////////////////
 ///////////////        State Modification       /////////////
@@ -236,48 +286,26 @@ function changeShowHide(state){
 //////////////////////////////////////////////////////////////
 ///////////////          Render                 /////////////
 ////////////////////////////////////////////////////////////
-/*render the page*/
-function render(state,chatroomElement,categoryElement,hideChatElement){
-  hideChatroom(hideChatElement);
-  Promise.all([renderCategoryList(state,categoryElement),
-    renderChatroomList(state, chatroomElement)]);
-}
-
-/* show all chatrooms or filtered chatroom list */
-function renderChatroomList(state,chatroomElement,categoryElement){
-  getDataChatroom(state)
-  .then(resQ=>{
-    let chatroomArr;
-    if(!categoryElement){
-      state.chatroomList = resQ;
-      chatroomArr = state.chatroomList;
-    }else{
-      chatroomArr = filterChatroom(state, categoryElement.text(),resQ);
-    }
-    let htmlStr = `<p>Chatroom List</p>
+/*render the list to show filtered chatrooms or all chatrooms */
+function renderChatroomList(state,chatroomElement,chatroomArr){
+  let htmlStr = `<p>Chatroom List</p>
           <ul>`;
-    const mappedChat = chatroomArr.map(el=>{
-      return `<li data-id=${el.id}>${el.title}</li>`;
-    }).join('\n\t');
-
-    htmlStr += mappedChat + '</ul>';
-    chatroomElement.html(htmlStr);
-  });
+  const mappedChat = chatroomArr.map(el=>{
+    return `<li data-id=${el.id}>${el.title}</li>`;
+  }).join('\n\t');
+  htmlStr += mappedChat + '</ul>';
+  chatroomElement.html(htmlStr);    
 }
 
-/* show all the category */
+/* renders the distinct category */
 function renderCategoryList(state,element){
-  getDataCategory(state)
-  .then(resQ =>{
-    state.categoryList = resQ;
-    let htmlStr = `<p>Categories</p>
-          <ul>`;
-    const mappedCategory = state.categoryList.map(el=>{
-      return `<li>${el}</li>`;
-    }).join('\n\t');
-    htmlStr += mappedCategory + '</ul>';
-    element.html(htmlStr);
-  });
+  let htmlStr = `<p>Categories</p>
+        <ul>`;
+  const mappedCategory = state.categoryList.map(el=>{
+    return `<li>${el}</li>`;
+  }).join('\n\t');
+  htmlStr += mappedCategory + '</ul>';
+  element.html(htmlStr);  
 }
 
 /*hide and show screens */
@@ -304,23 +332,6 @@ function renderChatroomPage(state,msgElement,titleCatElement){
   renderUpdTitleCat(state,titleCatElement);
 }
 
-/* after you send the message, render the chatroom message */
-function setUpdatedMessages(state,sentVal,messageElement){
-  getChatroomById(state.chatId)
-  .then(resGet=>{
-    
-    console.log('get',resGet);
-    setSentMsgToRes(state,resGet);
-    console.log(sentVal);
-    return addMsgToDb(state,sentVal);
-  })
-  .then(resUpd=>{
-    console.log('upd',resUpd);
-    setSentMsgToRes(state,resUpd);
-    renderChatroomMessages(state,messageElement); 
-  });
-}
-
 /*render chatroom messages */
 function renderChatroomMessages(state,messageElement){
   let msg;
@@ -345,6 +356,14 @@ function renderUpdTitleCat(state,titleCatElement){
   titleCatElement.html(htmlStr);
 }
 
+/*rendering the nav bar so username shows */
+function renderNavBar(state, element){
+  const message = `
+      <li class="nav_el"><a href="mainScreen.html" class="home">Jabber Jam</a></li>
+      <li class="nav_user"><p class="username">${state.userId}</p></li>`;
+  element.html(message);
+}
+
 //////////////////////////////////////////////////////////////
 ///////////////          Event Listeners        /////////////
 ////////////////////////////////////////////////////////////
@@ -355,7 +374,7 @@ function createChatroom(state){
     addToData($('.chatroom_form'))
     .then((resQ)=>{
       alert(`You have created the chatroom with the title ${resQ.title} and category ${resQ.category}`);
-      render(state,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));
+      mainScreenInit(state,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));
     });
   });
 }
@@ -363,14 +382,14 @@ function createChatroom(state){
 /* Show filter chatrooms */
 function showFilterChatroom(state){
   $('.category_list').on('click','li',function(event){
-    renderChatroomList(state,$('.list_chatroom'),$(this));
+    showFilteredOrAllChatrooms(state,$('.list_chatroom'),$(this));
   });
 }
 
 /*show all chatrooms */
 function showAllChatrooms(state){
   $('.category_list').on('click','p',function(event){
-    renderChatroomList(state,$('.list_chatroom'));
+    showFilteredOrAllChatrooms(state,$('.list_chatroom'));
   });
 }
 
@@ -438,7 +457,8 @@ function delChatroom(state){
 ////////////////////////////////////////////////////////////
 $(function(){
   setUserId(appState);
-  render(appState,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));
+  renderNavBar(appState, $('.nav_bar'));
+  mainScreenInit(appState,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));
   createChatroom(appState);
   showFilterChatroom(appState);
   showAllChatrooms(appState);
