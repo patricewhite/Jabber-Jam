@@ -1,39 +1,9 @@
 'use strict';
-// passport.use('login', new LocalStrategy({
-//     passReqToCallback : true
-//   },
-//   function(req, username, password, done) {
-//     // check in mongo if a user with username exists or not
-//     User.findOne({ 'username' :  username },
-//       function(err, user) {
-//         // In case of any error, return using the done method
-//         if (err)
-//           return done(err);
-//         // Username does not exist, log error & redirect back
-//         if (!user){
-//           console.log('User Not Found with username '+username);
-//           return done(null, false,
-//                 req.flash('message', 'User Not found.'));
-//         }
-//         // User exists but wrong password, log the error
-//         if (!isValidPassword(user, password)){
-//           console.log('Invalid Password');
-//           return done(null, false,
-//               req.flash('message', 'Invalid Password'));
-//         }
-//         // User and password both match, return user from
-//         // done method which will be treated like success
-//         return done(null, user);
-//       }
-//     );
-// }));
-
 //////////////////////////////////////////////////////////////
 ///////////////        Fetch                 ////////////////
 ////////////////////////////////////////////////////////////
 function addUser(user){
 
-  //console.log('bbb', user);
   return fetch('http://localhost:8080/users', {
     method: 'POST',
     mode:'cors',
@@ -66,11 +36,6 @@ function checkUser(){
       return res.json();
     });
   };
-
-
-//////////////////////////////////////////////////////////////
-///////////////        State Modification       /////////////
-////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////
 ///////////////          Render                 /////////////
@@ -142,7 +107,6 @@ function cLoginAfterSignUp(state){
     user['lastName'] = $('#last-name').val();
     user['email'] = $('#email').val();
     addUser(user);
-    console.log('aaaa', user);
     render(state,$('.container'));
   });
 }
@@ -154,12 +118,6 @@ function loggingIn(state){
     usr['username'] = $('#username').val();
     usr['password'] = $('#password').val();
     console.log(usr);
-    //store in cookie
-    //redirect
-    //hit datbase when clikcing button
-    //re-check auth page on thinkful
-
-
   })
 }
 //////////////////////////////////////////////////////////////
