@@ -88,3 +88,19 @@
   height: 30px;
 }
 
+/************************************************************
+                    Go Back To Main Screen
+*************************************************************/
+.go_back_to_main{
+  position: relative;
+  top:100px;
+  left:240px;
+}
+
+.go_back_to_main p{
+  border: 1px solid black;
+  text-align:center;
+  padding: 10px;
+  width: 100px;
+  margin:0px;
+}

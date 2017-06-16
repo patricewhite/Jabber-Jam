@@ -447,25 +447,54 @@ function updCatEnter(state){
     }
   });  
 }
+
+/*Delete Chatroom */
 function delChatroom(state){
   $('.delete_update').on('click','.deleteChat',function(event){
     deleteFromDb(state);
   });
 }
+
+/*go back to main screen */
+function goBackToMain(state){
+  $('.go_back_to_main').on('click','p',function(event){
+    renderHideMainShowChat(state,$('.main_hide_show'),$('.single_chatroom'));
+    mainScreenInit(state,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));  
+  });
+}
+//////////////////////////////////////////////////////////////
+///////////////     Grouping EventListeners     /////////////
+////////////////////////////////////////////////////////////
+/*Initialize the page */
+function initPage(state){
+  renderNavBar(state, $('.nav_bar'));
+  mainScreenInit(state,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));  
+}
+
+/*Stores all the filter or all chatrooms functions */
+function categoryListStorage(state){
+  showFilterChatroom(state);
+  showAllChatrooms(state);  
+}
+
+/* Stores all the update functions */
+function updateStorage(state){
+  updChatroomMsgClick(state);
+  updChatroomMsgEnter(state);
+  updTitleEnter(state);
+  updCatEnter(state);  
+}
+
 //////////////////////////////////////////////////////////////
 ///////////////          Callback Function      /////////////
 ////////////////////////////////////////////////////////////
 $(function(){
   setUserId(appState);
-  renderNavBar(appState, $('.nav_bar'));
-  mainScreenInit(appState,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));
+  initPage(appState);
   createChatroom(appState);
-  showFilterChatroom(appState);
-  showAllChatrooms(appState);
+  categoryListStorage(appState)
   hideMainScreen(appState);
-  updChatroomMsgClick(appState);
-  updChatroomMsgEnter(appState);
-  updTitleEnter(appState);
-  updCatEnter(appState);
+  updateStorage(appState);
   delChatroom(appState);
+  goBackToMain(appState);
 });
