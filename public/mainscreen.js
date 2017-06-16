@@ -6,9 +6,11 @@
 /* add data to the database chatroom */
 function addToData(element){
   const obj = {
-    title:element.find('#title').val(),
-    category:element.find('#category').val()
+    title:element.find('#title').val().toLowerCase(),
+    category:element.find('#category').val().toLowerCase()
   };
+  element.find('#title').val('');
+  element.find('#category').val('');
   return fetch('https://jabber-jam.herokuapp.com/chatrooms',{
     method: 'POST',
     mode:'cors',
@@ -165,25 +167,9 @@ function deleteFromDb(state){
   });
 }
 
-/*Set the title category value to the title category value */
-function setTitleValue(state,sentElement,titleElement){
-  addTitleToDb(state,sentElement.val())
-  .then(resUpd=>{
-    setStateToUpdTitle(state,resUpd);
-    renderUpdTitleCat(state,titleElement);
-  });
-}
-
-/*Initialize the chatroom page */
-function initChatroom(state,element){
-  getChatroomById(element.attr('data-id'))
-  .then(resQ =>{
-    setInitialState(state,resQ);
-    renderChatroomPage(appState, $('.conversation'),$('.delete_update'));
-    renderHideMainShowChat(appState,$('.main_hide_show'),$('.single_chatroom'));
-  });
-}
-
+///////////////////////////////////////////////////////////////////////////////
+///////////          Continuation with the Fetch Functions       /////////////
+/////////////////////////////////////////////////////////////////////////////
 /*Main Screen Init*/
 function  mainScreenInit(state,chatroomElement,categoryElement,hideChatElement){
   hideChatroom(hideChatElement);
@@ -215,11 +201,30 @@ function showFilteredOrAllChatrooms(state,chatroomElement,categoryElement){
   });
 }
 
+/*Initialize the chatroom page */
+function initChatroom(state,element){
+  getChatroomById(element.attr('data-id'))
+  .then(resQ =>{
+    setInitialState(state,resQ);
+    renderChatroomPage(appState, $('.conversation'),$('.delete_update'));
+    renderHideMainShowChat(appState,$('.main_hide_show'),$('.single_chatroom'));
+  });
+}
+
 /*Set the updated category value to the state category value */
 function setCatValue(state,sentElement,titleElement){
   addCatToDb(state,sentElement.val())
   .then(resUpd=>{
     setStateToUpdCat(state,resUpd);
+    renderUpdTitleCat(state,titleElement);
+  });
+}
+
+/*Set the title category value to the title category value */
+function setTitleValue(state,sentElement,titleElement){
+  addTitleToDb(state,sentElement.val())
+  .then(resUpd=>{
+    setStateToUpdTitle(state,resUpd);
     renderUpdTitleCat(state,titleElement);
   });
 }
@@ -234,6 +239,15 @@ function setUpdatedMessages(state,sentVal,messageElement){
   .then(resUpd=>{
     setSentMsgToRes(state,resUpd);
     renderChatroomMessages(state,messageElement); 
+  })
+  .catch(err=>{
+    alert('This chatroom has been deleted');
+    console.log(err);
+    renderHideMainShowChat(state,$('.main_hide_show'),$('.single_chatroom'));
+    mainScreenInit(state,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));  
+    // state.sentMessages = [];
+    // state.chatId ='';
+    // renderChatroomPage(state, $('.conversation'),$('.delete_update'));
   });
 }
 
@@ -460,8 +474,12 @@ function goBackToMain(state){
   $('.go_back_to_main').on('click','p',function(event){
     renderHideMainShowChat(state,$('.main_hide_show'),$('.single_chatroom'));
     mainScreenInit(state,$('.list_chatroom'),$('.category_list'),$('.single_chatroom'));  
+    // state.sentMessages = [];
+    // state.chatId ='';
+    // renderChatroomPage(state, $('.conversation'),$('.delete_update'));
   });
 }
+
 //////////////////////////////////////////////////////////////
 ///////////////     Grouping EventListeners     /////////////
 ////////////////////////////////////////////////////////////
