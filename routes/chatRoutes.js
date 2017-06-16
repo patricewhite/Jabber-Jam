@@ -38,7 +38,7 @@ router.use(passport.initialize());
 
 
 ////////////////////// Post for ChatRoom ////////////////////////
-router.post('/', passport.authenticate('basic', {session: false}), (req,res) => {
+router.post('/',  (req,res) => {
   const requiredFields = ['title', 'category'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -111,7 +111,7 @@ router.get('/:id', (req, res) => {
 
 ////////////////////PUT for ChatRoom /////////////////////////
 
-router.put('/:id', passport.authenticate('basic', {session: false}), (req, res) => {
+router.put('/:id', (req, res) => {
   if(!(req.params.id === req.body.id)){
     const message = (`Request path id (${req.params.id}) and request body id
       (${req.body.id}) must match`);
@@ -136,7 +136,7 @@ router.put('/:id', passport.authenticate('basic', {session: false}), (req, res) 
 
 /////////////////////DELETE for ChatRoom /////////////////////////
 
-router.delete('/:id', passport.authenticate('basic', {session: false}), (req, res) => {
+router.delete('/:id', (req, res) => {
   ChatRoom
     .findByIdAndRemove(req.params.id)
     .exec()
