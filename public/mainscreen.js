@@ -297,6 +297,11 @@ function changeShowHide(state){
   return state;
 }
 
+/*Reset state*/
+function resetState(state){
+  state.chatId = '';
+  state.sentMessages = [];
+}
 //////////////////////////////////////////////////////////////
 ///////////////          Render                 /////////////
 ////////////////////////////////////////////////////////////
@@ -515,4 +520,5 @@ $(function(){
   updateStorage(appState);
   delChatroom(appState);
   goBackToMain(appState);
+  resetState(appState);
 });
