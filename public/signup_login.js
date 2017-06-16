@@ -142,6 +142,9 @@ function loggingIn(state){
     usr['password'] = $('#password').val();
     console.log(usr);
     renderUserCheck(state)
+    //hit datbase when clikcing button
+    //re-check auth page on thinkful 
+
 
   })
 }
