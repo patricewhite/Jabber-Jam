@@ -7,6 +7,7 @@ const appState ={
   // signup_login.js stuff
   signUp:true,
   login:false,
+  users:[],
   //mainscreen.js stuff
   chatroomList:[],
   categoryList:[],

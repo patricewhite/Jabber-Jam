@@ -1,16 +1,72 @@
 'use strict';
 
 //////////////////////////////////////////////////////////////
+///////////////        Fetch                 ////////////////
+////////////////////////////////////////////////////////////
+function addUser(user){
+
+  //console.log('bbb', user);
+  return fetch('http://localhost:8080/users', {
+    method: 'POST',
+    mode:'cors',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify(user)
+  })
+  .then(res => {
+    if(!res.ok){
+      return Promise.reject(res.statusText);
+    }
+    return res.json();
+  });
+}
+
+
+function checkUser(){
+  return fetch('http://localhost:8080/users', {
+    method: 'GET',
+    mode: 'cors',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  })
+    .then(res => {
+      if(!res.ok){
+        return Promise.reject(res.statusText);
+      }
+      return res.json();
+    });
+  };
+
+
+//////////////////////////////////////////////////////////////
 ///////////////        State Modification       /////////////
 ////////////////////////////////////////////////////////////
-
+function findUser(state, username){
+  state.users.find(usr => {
+    return usr.username === username;
+  });
+}
 //////////////////////////////////////////////////////////////
 ///////////////          Render                 /////////////
 ////////////////////////////////////////////////////////////
+function renderUserCheck(state, user){
+  getUserData(state)
+  .then(resU => {
+    let usersArr;
+    if(!user){
+      alert("Incorrect usernname");
+    }else{
+      usersArr = findUser(state, user.text())
+    }
+  });
+}
+
 function render(state,element){
   let formStr;
   if(state.signUp && state.login ===false){
-    formStr = `      
+    formStr = `
     <form class="signup_form"action="index.html">
         <fieldset name="signup">
           <legend class="signup_legend">Sign Up</legend>
@@ -28,7 +84,7 @@ function render(state,element){
         <button class="js-change-login" type='submit'>Sign Up</button>
       </form>`;
   }else if(state.login && state.signUp === false){
-    formStr =`      
+    formStr =`
       <form class="login_form" action="mainScreen.html">
         <fieldset name="login">
           <legend class="login_legend">Login</legend>
@@ -37,7 +93,7 @@ function render(state,element){
           <label for="password">Password</label>
           <input type="password" placeholder="password" id="password" name="password" required/>
         </fieldset>
-        <button type='submit'>Login</button>
+        <button id='logIn' type='submit'>Login</button>
       </form>`;
   }
   element.html(formStr);
@@ -64,10 +120,30 @@ function changeToSignUp(state){
 function cLoginAfterSignUp(state){
   $('.container').on('click','.js-change-login',function(event){
     event.preventDefault();
+    const user = {};
     state.login = true;
     state.signUp = false;
+    user['username'] = $('#username').val();
+    user['password'] = $('#password').val();
+    user['firstName'] = $('#first-name').val();
+    user['lastName'] = $('#last-name').val();
+    user['email'] = $('#email').val();
+    addUser(user);
+    console.log('aaaa', user);
     render(state,$('.container'));
   });
+}
+
+function loggingIn(state){
+  $('.container').on('submit', '#logIn', function(event){
+    event.preventDefault();
+    const usr = {};
+    usr['username'] = $('#username').val();
+    usr['password'] = $('#password').val();
+    console.log(usr);
+    renderUserCheck(state)
+
+  })
 }
 //////////////////////////////////////////////////////////////
 ///////////////          Callback Function      /////////////
@@ -77,4 +153,5 @@ $(function(event){
   changeToLogin(appState);
   changeToSignUp(appState);
   cLoginAfterSignUp(appState);
+  loggingIn(appState);
 });
