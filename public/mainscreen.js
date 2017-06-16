@@ -88,11 +88,14 @@ function addMsgToDb(state,message){
     messages:state.sentMessages
   };
 
+  let username = 'loco4';
+  let password = 'dance';
   return fetch(`https://jabber-jam.herokuapp.com/chatrooms/${state.chatId}`, {
     method: 'PUT',
     mode: 'cors',
     headers: new Headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization':'Basic ' + btoa(username + ":" + password)
     }),
     body: JSON.stringify(object)
   })
@@ -140,11 +143,14 @@ function addTitleToDb(state,title){
     title:state.title
   };
 
+  let username = 'loco4';
+  let password = 'dance';
   return fetch(`https://jabber-jam.herokuapp.com/chatrooms/${state.chatId}`, {
     method: 'PUT',
     mode: 'cors',
     headers: new Headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization':'Basic ' + btoa(username + ":" + password)
     }),
     body: JSON.stringify(object)
   })
@@ -159,11 +165,14 @@ function addTitleToDb(state,title){
 /*Delete the chatroom from the database and
   go back to the main screen */
 function deleteFromDb(state){
+  let username = 'loco4';
+  let password = 'dance';
   return fetch(`https://jabber-jam.herokuapp.com/chatrooms/${state.chatId}`, {
     method: 'DELETE',
     mode: 'cors',
     headers: new Headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization':'Basic ' + btoa(username + ":" + password)
     })
   })
   .then(()=>{
