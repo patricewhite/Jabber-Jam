@@ -1,43 +1,58 @@
+'use strict';
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                  Imports                   /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Import Express middleware */
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const jsonParser = bodyParser.json();
+
+/*Database Import */
 const mongoose = require('mongoose');
+
+/*Password Import stuff */
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
+
+/*Our Model Import*/
 const{ChatRoom,User} = require('../models/chatroom');
+
+/*applying jsonParser to our routes that use router */
 router.use(jsonParser);
 
+/*Creating a basicStrategy object that checks if the user exists in database 
+and checks if user enter right password for that user */
 const basicStrategy = new BasicStrategy((username, password, callback) => {
   let user;
-
   User
-.findOne({username: username})
-.exec()
-.then(_user => {
-  user = _user;
-
-  if (!user) {
-    return callback(null, false, {message: 'Incorrect username'});
-
-  }
-  return user.validatePassword(password);
-})
-.then(isValid => {
-  if (!isValid) {
-    return callback(null, false, {message: 'Incorrect password'});
-  }
-  else {
-    return callback(null, user);
-  }
-});
+  .findOne({username: username})
+  .exec()
+  .then(_user => {
+    user = _user;
+    if (!user) {
+      return callback(null, false, {message: 'Incorrect username'});
+    }
+    return user.validatePassword(password);
+  })
+  .then(isValid => {
+    if (!isValid) {
+      return callback(null, false, {message: 'Incorrect password'});
+    }
+    else {
+      return callback(null, user);
+    }
+  });
 });
 
+/*calling passport's basic strategy and setting the value into req.user */
 passport.use(basicStrategy);
 router.use(passport.initialize());
 
-
-////////////////////// Post for ChatRoom ////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                  Post Chatroom             /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Creating and adding it into database */
 router.post('/',  (req,res) => {
   const requiredFields = ['title', 'category'];
   for (let i = 0; i < requiredFields.length; i++) {
@@ -48,7 +63,6 @@ router.post('/',  (req,res) => {
       return res.status(400).send(message);
     }
   }
-
   ChatRoom.create({
     title: req.body.title,
     category: req.body.category,
@@ -63,9 +77,10 @@ router.post('/',  (req,res) => {
     });
 });
 
-
-//////////////////// GET for ChatRoom /////////////////////
-
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                  Get Chatroom             /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Getting all the chatrooms */
 router.get('/', (req,res) => {
   ChatRoom
     .find()
@@ -80,6 +95,7 @@ router.get('/', (req,res) => {
       });
 });
 
+/*Getting all distinct categories */
 router.get('/distinct', (req, res) => {
   ChatRoom
   .distinct("category")
@@ -95,6 +111,7 @@ router.get('/distinct', (req, res) => {
     });
 });
 
+/*Getting a specific chatroom */
 router.get('/:id', (req, res) => {
   ChatRoom
     .findById(req.params.id)
@@ -109,8 +126,10 @@ router.get('/:id', (req, res) => {
       });
 });
 
-////////////////////PUT for ChatRoom /////////////////////////
-
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                  Put for Chatroom          /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Updating a document in the database */
 router.put('/:id', (req, res) => {
   if(!(req.params.id === req.body.id)){
     const message = (`Request path id (${req.params.id}) and request body id
@@ -118,10 +137,8 @@ router.put('/:id', (req, res) => {
     console.error(message);
     res.status(400).json({message: message});
   }
-
   const toUpdate = {};
   const updateableFields = ['title', 'category','messages', 'users'];
-
   updateableFields.forEach(field => {
     if( field in req.body) {
         toUpdate[field] = req.body[field];
@@ -134,8 +151,10 @@ router.put('/:id', (req, res) => {
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
-/////////////////////DELETE for ChatRoom /////////////////////////
-
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////               Delete for Chatroom          /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Deleting a document in the database*/
 router.delete('/:id', (req, res) => {
   ChatRoom
     .findByIdAndRemove(req.params.id)
@@ -144,9 +163,16 @@ router.delete('/:id', (req, res) => {
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
-
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////               Page Not Found               /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Page Not Found */
 router.use('*', function(req, res) {
   res.status(404).json({message: 'Not Found'});
 });
 
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                      Exporting Routers              ////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Exporting routers */
 module.exports = router;
