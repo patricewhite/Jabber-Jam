@@ -1,9 +1,50 @@
 'use strict';
 //////////////////////////////////////////////////////////////
+///////////////        State Modification    ////////////////
+////////////////////////////////////////////////////////////
+/*Changes Log In bool*/
+function changeToLoginBool(state){
+  state.login = true;
+  state.signUp = false;
+  return state;
+}
+
+/*Changes Sign Up Bool */
+function changeToSignUpBool(state){
+  state.login = false;
+  state.signUp = true;
+  return state;
+}
+
+//////////////////////////////////////////////////////////////
+///////////////        Helper Functions      ////////////////
+////////////////////////////////////////////////////////////
+/*Store User Sign Up values */
+function storeUserSignUpInfo(){
+  const user = {
+    username: $('#username').val(),
+    password: $('#password').val(),
+    firstName: $('#first-name').val(),
+    lastName: $('#last-name').val(),
+    email: $('#email').val()
+  };
+  return user;
+}
+
+/*Store User Login values */
+function storeUserLoginInfo(){
+  const user = {
+    username: $('#username').val(),
+    password: $('#password').val()
+  };
+  return user;
+}
+
+//////////////////////////////////////////////////////////////
 ///////////////        Fetch                 ////////////////
 ////////////////////////////////////////////////////////////
+/*Fetch call for adding user into the database*/
 function addUser(user){
-
   return fetch('http://localhost:8080/users', {
     method: 'POST',
     mode:'cors',
@@ -20,7 +61,7 @@ function addUser(user){
   });
 }
 
-
+/*Fetch call for checking the user is correct */
 function checkUser(){
   return fetch('http://localhost:8080/users', {
     method: 'GET',
@@ -29,18 +70,18 @@ function checkUser(){
       'Content-Type': 'application/json'
     })
   })
-    .then(res => {
-      if(!res.ok){
-        return Promise.reject(res.statusText);
-      }
-      return res.json();
-    });
-  };
+  .then(res => {
+    if(!res.ok){
+      return Promise.reject(res.statusText);
+    }
+    return res.json();
+  });
+}
 
 //////////////////////////////////////////////////////////////
 ///////////////          Render                 /////////////
 ////////////////////////////////////////////////////////////
-
+/* Renders the login and signup form*/
 function render(state,element){
   let formStr;
   if(state.signUp && state.login ===false){
@@ -76,53 +117,49 @@ function render(state,element){
   }
   element.html(formStr);
 }
+
 //////////////////////////////////////////////////////////////
 ///////////////          Event Listeners        /////////////
 ////////////////////////////////////////////////////////////
+/*Event Listener for the Log In on the nav bar */
 function changeToLogin(state){
   $('.login').on('click',function(event){
-    state.login = true;
-    state.signUp = false;
+    changeToLoginBool(state);
     render(state,$('.container'));
   });
 }
 
+/*Event Listener for the Sign Up on the nav bar */
 function changeToSignUp(state){
   $('.signup').on('click',function(event){
-    state.login = false;
-    state.signUp = true;
+    changeToSignUpBool(state);
     render(state,$('.container'));
   });
 }
 
+/*Event Listener for the changing to login screen after sign up */
 function cLoginAfterSignUp(state){
   $('.container').on('click','.js-change-login',function(event){
     event.preventDefault();
-    const user = {};
-    state.login = true;
-    state.signUp = false;
-    user['username'] = $('#username').val();
-    user['password'] = $('#password').val();
-    user['firstName'] = $('#first-name').val();
-    user['lastName'] = $('#last-name').val();
-    user['email'] = $('#email').val();
+    changeToLoginBool(state);
+    const user = storeUserSignUpInfo();
     addUser(user);
     render(state,$('.container'));
   });
 }
 
+/*Event Listener submitting the form and changing it to mainscreen */
 function loggingIn(state){
   $('.container').on('submit', '#logIn', function(event){
     event.preventDefault();
-    const usr = {};
-    usr['username'] = $('#username').val();
-    usr['password'] = $('#password').val();
-    console.log(usr);
-  })
+    const user = storeUserLoginInfo();
+  });
 }
+
 //////////////////////////////////////////////////////////////
 ///////////////          Callback Function      /////////////
 ////////////////////////////////////////////////////////////
+/* Callback function after DOM is ready */
 $(function(event){
   render(appState, $('.container'));
   changeToLogin(appState);

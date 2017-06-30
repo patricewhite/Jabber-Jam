@@ -17,7 +17,7 @@ function addToData(element){
     mode:'cors',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'Authorization':'Basic ' + btoa(username + ":" + password)
+      'Authorization':'Basic ' + btoa(username + ':' + password)
     }),
     body: JSON.stringify(obj)
   })
@@ -95,7 +95,7 @@ function addMsgToDb(state,message){
     mode: 'cors',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'Authorization':'Basic ' + btoa(username + ":" + password)
+      'Authorization':'Basic ' + btoa(username + ':' + password)
     }),
     body: JSON.stringify(object)
   })
@@ -123,7 +123,7 @@ function addCatToDb(state,category){
     mode: 'cors',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'Authorization':'Basic ' + btoa(username + ":" + password)
+      'Authorization':'Basic ' + btoa(username + ':' + password)
     }),
     body: JSON.stringify(object)
   })
@@ -150,7 +150,7 @@ function addTitleToDb(state,title){
     mode: 'cors',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'Authorization':'Basic ' + btoa(username + ":" + password)
+      'Authorization':'Basic ' + btoa(username + ':' + password)
     }),
     body: JSON.stringify(object)
   })
@@ -172,7 +172,7 @@ function deleteFromDb(state){
     mode: 'cors',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'Authorization':'Basic ' + btoa(username + ":" + password)
+      'Authorization':'Basic ' + btoa(username + ':' + password)
     })
   })
   .then(()=>{
@@ -526,11 +526,12 @@ function updateStorage(state){
 //////////////////////////////////////////////////////////////
 ///////////////          Callback Function      /////////////
 ////////////////////////////////////////////////////////////
+/* Callback function after DOM is ready */
 $(function(){
   setUserId(appState);
   initPage(appState);
   createChatroom(appState);
-  categoryListStorage(appState)
+  categoryListStorage(appState);
   hideMainScreen(appState);
   updateStorage(appState);
   delChatroom(appState);
