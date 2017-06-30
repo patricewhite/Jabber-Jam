@@ -1,12 +1,24 @@
+'use strict';
+
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                  Imports                   /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Import Express middleware */
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const jsonParser = bodyParser.json();
+
+/*Database Import */
 const mongoose = require('mongoose');
 
+/*Our Model Import*/
 const{User} = require('../models/chatroom');
 
-/////////////////////Get for User//////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                  Get Users                 /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Getting all users that exist */
 router.get('/', jsonParser, (req, res) => {
   User
     .find()
@@ -22,7 +34,10 @@ router.get('/', jsonParser, (req, res) => {
     );
 });
 
-//////////////////// Post for User/////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                Post for Users                 //////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Adding users into the database*/
 router.post('/', jsonParser, (req, res) => {
   const requiredFields = ['username', 'password', 'email'];
   for (let i = 0; i < requiredFields.length; i++) {
@@ -33,13 +48,9 @@ router.post('/', jsonParser, (req, res) => {
       return res.status(400).send(message);
     }
   }
-
   let {username, password, firstName, lastName,chatroomId,email} = req.body;
-
   username = username.trim();
   password = password.trim();
-
-  // check for existing user
   return User
     .find({username})
     .count()
@@ -48,7 +59,6 @@ router.post('/', jsonParser, (req, res) => {
       if (count > 0) {
         return res.status(422).json({message: 'username already taken'});
       }
-      // if no existing user, hash password
       return User.hashPassword(password);
     })
     .then(hash => {
@@ -71,7 +81,8 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
-
-
-
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                      Exporting Routers              ////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Exporting routers */
 module.exports = router;
