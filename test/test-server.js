@@ -158,7 +158,6 @@ describe('ChatRoom API resource', function(){
       .then(function(chat) {
         resChat.users[0].username.should.equal(chat.users[0].username);
         resChat.messages[0].message.should.equal(chat.messages[0].message);
-        //resChat.messages[0]._id.should.equal(chat.messages[0]._id);
         resChat.title.should.equal(chat.title);
         resChat.category.should.equal(chat.category);
       });
