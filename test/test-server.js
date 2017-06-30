@@ -1,15 +1,33 @@
+'use strict';
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                  Imports                   /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Importing Mocha, Chai, Faker (Testing stuff) */
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 const faker = require('faker');
+
+/*Database Import */
 const mongoose = require('mongoose');
 
+/*Server Import*/
 const{closeServer, runServer, app} = require('../server');
+
+/*Model Import */
 const{ChatRoom, User} = require('../models/chatroom');
+
+/*Mlab URL that stores our database */
 const {TEST_DATABASE_URL} = require('../config');
-const {DATABASE_URL} = require('../config');
+
+/*Apply chaiHttp to all our tests such that we can 
+simulate a request-response cycle */
 chai.use(chaiHttp);
 
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////    Creating dummy values and destroying Database    ////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Destroying the Database */
 function tearDownDb() {
   return new Promise((resolve, reject) => {
     console.warn('Deleting database');
@@ -19,9 +37,7 @@ function tearDownDb() {
   });
 }
 
-// var ObjectId = mongoose.Types.ObjectId;
-// var id1 = new ObjectId();
-
+/*Creating a dummy User */
 const USER = {
   username: faker.internet.userName(),
   password: 'password',
@@ -31,6 +47,7 @@ const USER = {
   chatroomId:[]
 };
 
+/*Seeding the user into the test database */
 function seedUser(){
   const newUser = {
     username: USER.username,
@@ -46,6 +63,7 @@ function seedUser(){
     });
 }
 
+/*Creating and Seeding dummy chatrooms in the test database*/
 function seedChatroom(){
   const seedData = [];
   for (let i =1; i <= 10; i++){
@@ -58,10 +76,13 @@ function seedChatroom(){
       category: faker.lorem.words()
     });
   }
-
   return ChatRoom.insertMany(seedData);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////              Sending static file test               ////////////////
+///////////////////////////////////////////////////////////////////////////////////
+/*Test that tests if index.html is sent to client*/
 describe('Testing root endpoint',function(){
   it('should verify you hit root url', function(){
     return chai.request(app)
@@ -72,6 +93,9 @@ describe('Testing root endpoint',function(){
   });
 });
 
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////         Chatroom Tests Get Put Post Delete          ////////////////
+///////////////////////////////////////////////////////////////////////////////////
 describe('ChatRoom API resource', function(){
 
   before(function() {
@@ -94,7 +118,6 @@ describe('ChatRoom API resource', function(){
 
   describe('Get endpoint for chatroom', function(){
     it('should return all exisitng chatrooms', function(){
-
       let res;
       return chai
       .request(app)
@@ -114,7 +137,6 @@ describe('ChatRoom API resource', function(){
     });
 
     it('should return chats with the correct fields', function(){
-
       let resChat;
       return chai
       .request(app)
@@ -527,6 +549,10 @@ describe('ChatRoom API resource', function(){
     });
   });
 });
+
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////               User Tests Get Post                   ////////////////
+///////////////////////////////////////////////////////////////////////////////////
 describe('Users API resource', function(){
 
   before(function() {
@@ -547,7 +573,6 @@ describe('Users API resource', function(){
     return closeServer();
   });
   describe('Get endpoint for users',function(){
-
     it('get all users',function(){
       let userResArr;
       return chai
