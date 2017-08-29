@@ -1,110 +1,160 @@
 /************************************************************
                     Find Chatrooms
 *************************************************************/
+
+
 /*chat room box*/
-.find_chatrooms{
-  margin:60px auto 10px auto;
+
+.find_chatrooms {
+  margin: 60px auto 10px auto;
   background-color: white;
   height: 70%;
-  padding:10px;
+  padding: 10px;
 }
+
 
 /*legend stuff*/
-.chatroom_legend{
-  font-size:30px;
-  text-align:center;
-  padding-bottom:10px;
+
+.chatroom_legend {
+  font-size: 30px;
+  text-align: center;
+  padding-bottom: 10px;
 }
+
 
 /*labels in chatroom form*/
-.chatroom_form label{
-  display:block;
-  margin-bottom:5px;
-  height:10%;
+
+.chatroom_form label {
+  display: block;
+  margin-bottom: 5px;
+  height: 10%;
 }
 
+
 /*inputs in chatroom form*/
-.chatroom_form input{
+
+.chatroom_form input {
   display: block;
   width: 100%;
   height: 10%;
   margin-bottom: 15px;
 }
 
+
 /*submit button in chatroom form*/
-.chatroom_form submit{
-  height:10%
+
+.chatroom_form button {
+  height: 10%;
+  cursor: pointer;
 }
+
 
 /************************************************************
                       List Of Chatrooms
 *************************************************************/
+
+
 /*chatroom list*/
-.list_chatroom{
-  margin:0 auto;
+
+.list_chatroom {
+  margin: 0 auto;
   background-color: white;
   height: 70%;
-  padding:10px;  
+  padding: 10px;
 }
+
 
 /*chatroom p element*/
-.list_chatroom p{
-  padding:0px;
-  margin:0px;
-  text-align:center;
-  font-size: 30px;
 
+.list_chatroom p {
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  font-size: 30px;
 }
+
 
 /*chatroom ul element*/
-.list_chatroom ul{
+
+.list_chatroom ul {
   list-style-type: none;
+  cursor: pointer;
 }
+
 
 /*chatroom li element*/
-.list_chatroom li{
-  margin-bottom:10px;
+
+.list_chatroom li {
+  margin-bottom: 10px;
 }
+
 
 /*chatroom a element*/
-.list_chatroom a{
-   text-decoration: none;
+
+.list_chatroom a {
+  text-decoration: none;
 }
 
+
 /*chatroom a element stuff*/
-.chatroom_link:link{
-  color:black;
+
+.chatroom_link:link {
+  color: black;
 }
-.chatroom_link:visted{
-  color:black;
+
+.chatroom_link:visted {
+  color: black;
 }
+
 
 /************************************************************
                       List Of Categories
 *************************************************************/
-.category_list{
-  padding:0px;
-  margin:0px;
-  text-align:center;
-  position:fixed;
-  bottom:0;
-  left:0;
-  height:130px;
+
+.category_list {
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 130px;
   width: 100%;
-  background-color:white;
+  background-color: white;
 }
-.category_list p{
+
+.category_list p {
   margin: 0;
-  padding:10px 0;
+  padding: 10px 0;
   font-size: 30px;
 }
-.category_list ul{
+
+.category_list ul {
   list-style-type: none;
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
 }
-.category_list li{
-  display:inline-block;
+
+.category_list li {
+  display: inline-block;
   font-size: 20px;
-  padding-right:10px;
+  padding-right: 10px;
+}
+
+
+/************************************************************
+                      Chatroom
+*************************************************************/
+
+.messages #button {
+  cursor: pointer;
+}
+
+.delete_update .deleteChat {
+  cursor: pointer;
+}
+
+.go_back_to_main {
+  cursor: pointer;
 }
