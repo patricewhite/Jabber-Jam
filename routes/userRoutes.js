@@ -13,25 +13,19 @@ const jsonParser = bodyParser.json();
 const mongoose = require('mongoose');
 
 /*Our Model Import*/
-const{User} = require('../models/chatroom');
+const {User} = require('../models/chatroom');
 
 /////////////////////////////////////////////////////////////////////////////////////
 ///////////////                  Get Users                 /////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 /*Getting all users that exist */
 router.get('/', jsonParser, (req, res) => {
-  User
-    .find()
-    .exec()
-    .then(users => {
-      res.json(users.map(user => user.apiRepr()));
-    })
-    .catch(
-      err => {
-        console.err(err);
-        res.status(500).json({message: 'Internal server error'});
-      }
-    );
+  User.find().exec().then(users => {
+    res.json(users.map(user => user.apiRepr()));
+  }).catch(err => {
+    console.err(err);
+    res.status(500).json({message: 'Internal server error'});
+  });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -48,37 +42,36 @@ router.post('/', jsonParser, (req, res) => {
       return res.status(400).send(message);
     }
   }
-  let {username, password, firstName, lastName,chatroomId,email} = req.body;
+  let {
+    username,
+    password,
+    firstName,
+    lastName,
+    chatroomId,
+    email
+  } = req.body;
   username = username.trim();
   password = password.trim();
-  return User
-    .find({username})
-    .count()
-    .exec()
-    .then(count => {
-      if (count > 0) {
-        return res.status(422).json({message: 'username already taken'});
-      }
-      return User.hashPassword(password);
-    })
-    .then(hash => {
-      return User
-        .create({
-          username,
-          password: hash,
-          firstName,
-          lastName,
-          chatroomId,
-          email
-        });
-    })
-    .then(user => {
-      return res.status(201).json(user.apiRepr());
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({message: 'Internal server error'});
+  return User.find({username}).count().exec().then(count => {
+    if (count > 0) {
+      return res.status(400).json({message: 'username already taken'});
+    }
+    return User.hashPassword(password);
+  }).then(hash => {
+    return User.create({
+      username,
+      password: hash,
+      firstName,
+      lastName,
+      chatroomId,
+      email
     });
+  }).then(user => {
+    return res.status(201).json(user.apiRepr());
+  }).catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Internal server error'});
+  });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
