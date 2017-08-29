@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Jabber Jam</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,24 +12,27 @@
   <link rel="stylesheet" href="chatroom.css">
   <link href="float-grid.css" rel="stylesheet">
 </head>
+
 <body>
-  <nav class="nav_bar grad_brown">
-    <ul class="nav_bar col-12">
+  <nav class="nav_bar col-12">
+    <ul>
       <li class="nav_el"><a href="mainScreen.html" class="home">Jabber Jam</a></li>
-      <li class="nav_user"><p class="username">Username</p></li>
+      <li class="nav_user">
+        <p class="username">Username</p>
+      </li>
     </ul>
   </nav>
-  <main class="main_screen grad_red">
+  <main class="main_screen">
     <div class=" main_hide_show row">
       <div class="col-4">
         <div class="find_chatrooms">
-          <form class="chatroom_form"action="" method="post">
+          <form class="chatroom_form" action="" method="post">
             <fieldset>
               <legend class="chatroom_legend">Find Chatroom</legend>
-                <label for="title">Title</label>
-                <input type="text" placeholder="Kuroko no Basket" id="title" name="title" required/>
-                <label for="category">Category</label>
-                <input type="text" placeholder="Anime" id="category" name="category" required/>
+              <label for="title">Title</label>
+              <input type="text" placeholder="Kuroko no Basket" id="title" name="title" required/>
+              <label for="category">Category</label>
+              <input type="text" placeholder="Anime" id="category" name="category" required/>
             </fieldset>
             <button type='submit'>Create Chatroom</button>
           </form>
@@ -41,7 +45,7 @@
         <div class="category_list"></div>
       </div>
     </div>
-    <div class ="single_chatroom">
+    <div class="single_chatroom">
       <div class="go_back_to_main">
         <p>Go Back to Main Screen</p>
       </div>
@@ -50,8 +54,8 @@
         <ul class="conversation"></ul>
       </div>
       <form class="messages col-12" action="index.html" method="post">
-        <input id="text" type="text" name="messageBox">
-        <input id="button" type="submit" name="sendButon" value="Send">
+        <input id="text" type="text" class="messageBox">
+        <input id="button" type="submit" class="sendButon" value="Send">
       </form>
     </div>
   </main>
@@ -60,4 +64,5 @@
   <script src="app.js" type="text/javascript"></script>
   <script src="mainscreen.js" type="text/javascript"></script>
 </body>
+
 </html>
