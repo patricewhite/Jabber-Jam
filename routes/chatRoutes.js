@@ -12,49 +12,87 @@ const jsonParser = bodyParser.json();
 /*Database Import */
 const mongoose = require('mongoose');
 
-/*Password Import stuff */
-const passport = require('passport');
-const BasicStrategy = require('passport-http').BasicStrategy;
-
 /*Our Model Import*/
-const{ChatRoom,User} = require('../models/chatroom');
+const {ChatRoom, User} = require('../models/chatroom');
 
 /*applying jsonParser to our routes that use router */
 router.use(jsonParser);
 
-/*Creating a basicStrategy object that checks if the user exists in database 
-and checks if user enter right password for that user */
-const basicStrategy = new BasicStrategy((username, password, callback) => {
-  let user;
-  User
-  .findOne({username: username})
-  .exec()
-  .then(_user => {
-    user = _user;
-    if (!user) {
-      return callback(null, false, {message: 'Incorrect username'});
+/*Password Import stuff */
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const BearerStrategy = require('passport-http-bearer').Strategy;
+
+const secret = require('../secret');
+
+let secret = {
+  CLIENT_ID: process.env.CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET,
+  DATABASE_URL: process.env.DATABASE_URL
+};
+
+passport.use(new GoogleStrategy({
+  clientID: secret.CLIENT_ID,
+  clientSecret: secret.CLIENT_SECRET,
+  callbackURL: '/api/auth/google/callback'
+}, (accessToken, refreshToken, profile, cb) => {
+  User.findOneAndUpdate({
+    googleId: profile.id
+  }, {
+    $set: {
+      googleId: profile.id,
+      accessToken: accessToken
     }
-    return user.validatePassword(password);
-  })
-  .then(isValid => {
-    if (!isValid) {
-      return callback(null, false, {message: 'Incorrect password'});
-    }
-    else {
-      return callback(null, user);
-    }
+  }, {
+    new: true,
+    upsert: true
+  }, (err, user) => {
+    console.log('!!!!!!!!!', user);
+    return cb(err, user);
   });
+}));
+
+passport.use(new BearerStrategy((token, done) => {
+  User.findOne({
+    accessToken: token
+  }, (err, user) => {
+    if (err) {
+      return done(err);
+    }
+    if (!user) {
+      return done(null, false);
+    }
+    return done(null, user, {scope: 'all'});
+  });
+}));
+
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////                Oauth Endpoints             /////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+router.get('/api/auth/google', passport.authenticate('google', {scope: ['profile']}));
+
+router.get('/api/auth/google/callback', passport.authenticate('google', {
+  failureRedirect: '/',
+  session: false
+}), (req, res) => {
+  res.cookie('accessToken', req.user.accessToken, {expires: 0});
+  res.redirect('/');
 });
 
-/*calling passport's basic strategy and setting the value into req.user */
-passport.use(basicStrategy);
-router.use(passport.initialize());
+router.get('/api/auth/logout', (req, res) => {
+  req.logout();
+  res.clearCookie('accessToken');
+  res.redirect('/');
+});
+
+router.get('/api/me', passport.authenticate('bearer', {session: false}), (req, res) => res.json({googleId: req.user.googleId}));
 
 /////////////////////////////////////////////////////////////////////////////////////
 ///////////////                  Post Chatroom             /////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 /*Creating and adding it into database */
-router.post('/',  (req,res) => {
+router.post('/', passport.authenticate('bearer', {session: false}), (req, res) => {
   const requiredFields = ['title', 'category'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -64,104 +102,77 @@ router.post('/',  (req,res) => {
       return res.status(400).send(message);
     }
   }
-  ChatRoom.create({
-    title: req.body.title,
-    category: req.body.category,
-  })
-  .then(
-    chats => {
-      res.status(201).json(chats.apiRepr());
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({message: 'Internal server error'});
-    });
+  ChatRoom.create({title: req.body.title, category: req.body.category}).then(chats => {
+    res.status(201).json(chats.apiRepr());
+  }).catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Internal server error'});
+  });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 ///////////////                  Get Chatroom             /////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 /*Getting all the chatrooms */
-router.get('/', (req,res) => {
-  ChatRoom
-    .find()
-    .exec()
-    .then(chats => {
-      res.json(chats.map(chats => chats.apiRepr()));
-    })
-    .catch(
-      err => {
-        console.error(err);
-        res.status(500).json({message: 'Internal server error'});
-      });
+router.get('/', passport.authenticate('bearer', {session: false}), (req, res) => {
+  ChatRoom.find().exec().then(chats => {
+    res.json(chats.map(chats => chats.apiRepr()));
+  }).catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Internal server error'});
+  });
 });
 
 /*Getting all distinct categories */
-router.get('/distinct', (req, res) => {
-  ChatRoom
-  .distinct("category")
-  .exec()
-  .then( chats => {
-    console.log("chats",chats)
+router.get('/distinct', passport.authenticate('bearer', {session: false}), (req, res) => {
+  ChatRoom.distinct("category").exec().then(chats => {
+    console.log("chats", chats)
     res.json(chats);
-    })
-  .catch(
-    err => {
-      console.log(err);
-      res.status(500).json({message: 'Internal server error'});
-    });
+  }).catch(err => {
+    console.log(err);
+    res.status(500).json({message: 'Internal server error'});
+  });
 });
 
 /*Getting a specific chatroom */
-router.get('/:id', (req, res) => {
-  ChatRoom
-    .findById(req.params.id)
-    .exec()
-    .then( chats => {
-      res.json(chats.apiRepr());
-      })
-    .catch(
-      err => {
-        console.error(err);
-        res.status(500).json({message: 'Internal server error'});
-      });
+router.get('/:id', passport.authenticate('bearer', {session: false}), (req, res) => {
+  ChatRoom.findById(req.params.id).exec().then(chats => {
+    res.json(chats.apiRepr());
+  }).catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Internal server error'});
+  });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 ///////////////                  Put for Chatroom          /////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 /*Updating a document in the database */
-router.put('/:id', (req, res) => {
-  if(!(req.params.id === req.body.id)){
+router.put('/:id', passport.authenticate('bearer', {session: false}), (req, res) => {
+  if (!(req.params.id === req.body.id)) {
     const message = (`Request path id (${req.params.id}) and request body id
       (${req.body.id}) must match`);
     console.error(message);
     res.status(400).json({message: message});
   }
   const toUpdate = {};
-  const updateableFields = ['title', 'category','messages', 'users'];
+  const updateableFields = ['title', 'category', 'messages', 'users'];
   updateableFields.forEach(field => {
-    if( field in req.body) {
-        toUpdate[field] = req.body[field];
+    if (field in req.body) {
+      toUpdate[field] = req.body[field];
     }
   });
-  ChatRoom
-    .findByIdAndUpdate(req.params.id, {$set: toUpdate},{new:true})
-    .exec()
-    .then(chat => res.status(201).json(chat.apiRepr()))
-    .catch(err => res.status(500).json({message: 'Internal server error'}));
+  ChatRoom.findByIdAndUpdate(req.params.id, {
+    $set: toUpdate
+  }, {new: true}).exec().then(chat => res.status(201).json(chat.apiRepr())).catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 ///////////////               Delete for Chatroom          /////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 /*Deleting a document in the database*/
-router.delete('/:id', (req, res) => {
-  ChatRoom
-    .findByIdAndRemove(req.params.id)
-    .exec()
-    .then(chat => res.status(204).end())
-    .catch(err => res.status(500).json({message: 'Internal server error'}));
+router.delete('/:id', passport.authenticate('bearer', {session: false}), (req, res) => {
+  ChatRoom.findByIdAndRemove(req.params.id).exec().then(chat => res.status(204).end()).catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
