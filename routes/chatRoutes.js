@@ -29,9 +29,9 @@ router.use(jsonParser);
 //   DATABASE_URL: process.env.DATABASE_URL
 // };
 
-if (process.env.NODE_ENV !== 'production') {
-  secret = require('../secret');
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   secret = require('../secret');
+// }
 
 // passport.use(new GoogleStrategy({
 //   clientID: secret.CLIENT_ID,
