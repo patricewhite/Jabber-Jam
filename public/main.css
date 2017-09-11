@@ -44,6 +44,11 @@ body {
   cursor: pointer;
 }
 
+.signOut {
+  list-style: none;
+  text-align: right;
+}
+
 
 /*Jabber Jam list element*/
 

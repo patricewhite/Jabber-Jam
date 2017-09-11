@@ -1,45 +1,57 @@
 /*****************************************************************************
                   Delete Chatroom and Update Title and Category
 ******************************************************************************/
+
+
 /*delete update block ul elements*/
-.delete_update{
+
+.delete_update {
   list-style-type: none;
-  position: relative;
-  top: 90px;  
+  margin-top: 10%;
 }
 
+
 /*delete update block li elements*/
-.delete_update li{
+
+.delete_update li {
   border: 1px solid black;
   padding: 10px;
   list-style-type: none;
-  margin-left:15%;
-  width:40%;
-  text-align:center;
+  margin-left: 15%;
+  width: 40%;
+  text-align: center;
 }
+
 
 /*update title block*/
-.updT{
-  margin-bottom: 10px; 
-  display:inline-block;
+
+.updT {
+  margin-bottom: 10px;
+  display: inline-block;
 }
 
+
 /*update title text box*/
-#updateTitle{
-  display:inline-block;
+
+#updateTitle {
+  display: inline-block;
   margin-left: 40px;
   width: 300px;
 }
 
+
 /*update Category block*/
-.updCat{
+
+.updCat {
   margin-bottom: 10px;
-  display:inline-block;
+  display: inline-block;
 }
 
+
 /*update category text box*/
-#updateCat{
-  display:inline-block;
+
+#updateCat {
+  display: inline-block;
   margin-left: 40px;
   width: 300px;
 }
@@ -48,59 +60,72 @@
 /*****************************************************************************
                               Chat box
 ******************************************************************************/
+
+
 /*Entire chat block*/
+
 .chatbox {
-  top: 100px;
-  position: relative;
+  margin-top: 5%;
   height: 300px;
   width: 60%;
-  margin-left: 250px;
   background-color: white;
-  overflow-y:auto;
+  margin: auto;
 }
 
+
 /*chat messages*/
+
 .conversation {
   list-style: none;
+  padding-top: 5%;
 }
+
 
 /*****************************************************************************
                           Form Stuff for Chatbox
 ******************************************************************************/
+
+
 /*Entire messages form*/
+
 .messages {
-  top: 100px;
   padding-top: 10px;
   height: 200px;
   position: relative;
-  margin-left: 235px;
+  margin-left: 20%;
 }
+
 
 /*text input*/
+
 #text {
-  width: 700px;
+  width: 65%;
   height: 30px;
 }
 
+
 /*button click*/
+
 #button {
-  width: 100px;
+  width: 10%;
   height: 30px;
 }
+
 
 /************************************************************
                     Go Back To Main Screen
 *************************************************************/
-.go_back_to_main{
+
+.go_back_to_main {
   position: relative;
-  top:100px;
-  left:240px;
+  top: 100px;
+  left: 240px;
 }
 
-.go_back_to_main p{
+.go_back_to_main p {
   border: 1px solid black;
-  text-align:center;
+  text-align: center;
   padding: 10px;
   width: 100px;
-  margin:0px;
+  margin: 0px;
 }

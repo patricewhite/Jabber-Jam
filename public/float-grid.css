@@ -37,6 +37,7 @@
 /*3 columns*/
 
 .col-4, .col-6, .col-12 {
+  float: left;
   padding-left: 1.04166666%;
   padding-right: 1.04166666%;
 }
@@ -45,6 +46,30 @@
 /*Mobile*/
 
 .col-4, .col-6 .col-12 {
+  width: 100%;
+}
+
+
+/*Non Mobile*/
+
+
+/* 4 columns */
+
+.col-4 {
+  width: 33.33%;
+}
+
+
+/* 6 columns */
+
+.col-6 {
+  width: 50%;
+}
+
+
+/* 12 columns */
+
+.col-12 {
   width: 100%;
 }
 
