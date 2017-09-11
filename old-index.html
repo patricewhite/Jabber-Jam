@@ -8,26 +8,22 @@
   <meta name="google-signin-client_id" content="CLIENT_ID">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.css" rel="stylesheet">
   <link href="/main.css" rel="stylesheet">
-  <link rel="stylesheet" href="/signup_login.css" rel="stylesheet">
+  <link rel="stylesheet" href="/mainScreen.css">
+  <link rel="stylesheet" href="/chatroom.css">
   <link href="/float-grid.css" rel="stylesheet">
 </head>
 
 <body>
-  <nav class="nav_bar col-12">
-    <ul>
-      <li class="nav_el"><a href="index.html" class="home">Jabber Jam</a></li>
-    </ul>
-  </nav>
-  <main class="signup_login">
-    <!-- <div class="container"></div> -->
-    <div class="g-signin2" data-onsuccess="onSignIn"> </div>
-    <div class="container">
-      <a href="#" onclick="signOut();">Sign out</a>
-    </div>
-  </main>
+  <nav id="t-nav" class="nav_bar col-12"></nav>
+  <main id="t-main_screen" class="main_screen"></main>
+
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="src/js/main.js" type="text/javascript">
+  </script>
   <script src="/app.js" type="text/javascript"></script>
+  <script src="/base64js.min.js"></script>
   <script src="/index.js" type="text/javascript"></script>
+  <script src="/mainscreen.js" type="text/javascript"></script>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
 </body>
 

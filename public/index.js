@@ -9,12 +9,20 @@ function onSignIn(googleUser) {
   console.log('Name: ' + profile.getName());
   console.log('Image URL: ' + profile.getImageUrl());
   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-  window.location.href = "mainScreen.html";
+  //window.location.href = "mainScreen.html";
+  loadTemplate();
 }
 
 function signOut() {
   var auth2 = userLoggedIn.getAuthInstance();
   auth2.signOut().then(function() {
     console.log('User signed out.');
+  });
+}
+
+function loadTemplate() {
+  let target = $(this).data('template');
+  $.get('views/mainScreen.html', (data) => {
+    $('#t-main_screen').html(data);
   });
 }
