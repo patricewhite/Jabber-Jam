@@ -29,24 +29,24 @@ go to localhost:8080 in browser<br/>
 ## Screenshots <br/>
 #### SignUp Screen <br/>
 When you signup, you go to log in screen<br/>
-![SignUp](images/JabberJamSignUp.png "SignUp Screen")<br/>
+![SignUp](readme-assets/signUp.png "SignUp Screen")<br/>
 
 #### Login Screen <br/>
 When you login, you go to main screen<br/>
-![LogIn](images/JabberJamLogIn.png "Login Screen")<br/>
+![LogIn](readme-assets/login.png "Login Screen")<br/>
 
 #### MainScreen <br/>
 This screen shows all chatrooms and all categories. You can also create chatroom from this screen.
-![MainScreen](images/JabberJamMainScreen.png "Main Screen")<br/>
+![MainScreen](readme-assets/main.png "Main Screen")<br/>
 
 #### Filter <br/>
 When you click on one of the categories, it shows list of chatrooms in that category. When you click on one of the chatrooms, it will lead you to the chatroom page.<br/>
-![Filter](images/JabberJamFilter.png "Filter Screen")<br/>
+![Filter](readme-assets/filter.png "Filter Screen")<br/>
 
 #### Chatroom <br/>
 In this screen, you can update title and category, send messages, delete chatroom, or go back to main page.
-![Chatroom](images/JabberJamChatroom.png "Chatroom Screen")<br/>
+![Chatroom](readme-assets/chatroom.png "Chatroom Screen")<br/>
 
 #### Sending a Message <br/>
 You can press your enter key or click send to send the message.
-![SendMessage](images/JabberJamSendMessage.png "Send Message Screen")
+![SendMessage](readme-assets/send.png "Send Message Screen")
