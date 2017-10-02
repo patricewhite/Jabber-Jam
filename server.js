@@ -15,6 +15,7 @@ mongoose.Promise = global.Promise;
 app.use(cors());
 // app.use(setCorsHeaders);
 app.use(express.static('public'));
+app.use( '/src', express.static(__dirname + '/src') );
 app.use('/users', userRouter);
 app.use('/chatrooms', chatRouter);
 app.use(morgan('common'));
