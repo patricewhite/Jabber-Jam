@@ -16,6 +16,7 @@ app.use(cors());
 // app.use(setCorsHeaders);
 app.use(express.static('public'));
 app.use( '/src', express.static(__dirname + '/src') );
+app.use( '/css', express.static(__dirname + '/src/css') );
 app.use('/users', userRouter);
 app.use('/chatrooms', chatRouter);
 app.use(morgan('common'));
