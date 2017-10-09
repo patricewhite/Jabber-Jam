@@ -2,9 +2,9 @@
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
-const userRouter = require('./routes/userRoutes');
-const chatRouter = require('./routes/chatRoutes');
-const {DATABASE_URL, PORT} = require('./config');
+const userRouter = require('./app/routes/userRoutes');
+const chatRouter = require('./app/routes/chatRoutes');
+const {DATABASE_URL, PORT} = require('./config/database');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
@@ -14,7 +14,11 @@ mongoose.Promise = global.Promise;
 
 app.use(cors());
 // app.use(setCorsHeaders);
-app.use(express.static('public'));
+app.use( '/', express.static(__dirname + '/public') );
+app.use( '/src', express.static(__dirname + '/src') );
+app.use( '/css', express.static(__dirname + '/src/css') );
+app.use( '/js', express.static(__dirname + '/src/js') );
+app.use( '/jquery', express.static(__dirname + '/node_modules/jquery/dist') );
 app.use('/users', userRouter);
 app.use('/chatrooms', chatRouter);
 app.use(morgan('common'));
