@@ -1,7 +1,28 @@
 //----------------------------------------------------------------------------
 //  COMMON COMPONENTS
 //----------------------------------------------------------------------------
+/*Jabber Jam font stuff*/
 
+.home {
+  display: block;
+  margin: 7.5px 0px;
+  padding: 5px 0px;
+  height: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+
+/*Jabber Jam hyperlink pseudoclasses*/
+
+.home:link {
+  color: black;
+}
+
+.home:visited {
+  color: black;
+}
 
 
 //----------------------------------------------------------------------------
@@ -13,9 +34,419 @@
 //----------------------------------------------------------------------------
 //  HEADER
 //----------------------------------------------------------------------------
+.nav_bar {
+  width: 100%;
+  height: 10%;
+  position: fixed;
+  margin: 0px;
+  list-style-type: none;
+  padding-left: 2.5%;
+  background-color: #FF8360;
+}
 
+.nav_bar .login {
+  cursor: pointer;
+}
+
+.nav_bar .signup {
+  cursor: pointer;
+}
+
+/*Jabber Jam list element*/
+
+.nav_el {
+  display: inline-block;
+  padding: 0px 7% 0px 0px;
+}
+
+
+/*Sign Up/ Login list element*/
+
+.nav_el2 {
+  display: inline-block;
+  padding-right: 10px;
+}
+
+
+/*User list element*/
+
+.nav_user {
+  display: inline-block;
+  padding-right: 10px;
+}
 
 
 //----------------------------------------------------------------------------
 //  MAIN
 //----------------------------------------------------------------------------
+/*fieldset default*/
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/*Login/signup font stuff*/
+
+.login, .signup {
+  margin: 7.5px 0px;
+  padding: 5px 0px;
+  height: 25px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+
+/*Username font stuff*/
+
+.username {
+  margin-right: 30%;
+  height: 25px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/*Set height for everything to 100%*/
+
+html, body, .signup_login, .main_screen, .chatroom_interior {
+  height: 100%;
+  overflow: auto;
+}
+
+body {
+  background-color: #4C86A8;
+}
+
+.main_screen {
+  padding-top: 5%;
+}
+
+/*delete update block ul elements*/
+.delete_update{
+  list-style-type: none;
+  position: relative;
+  top: 90px;
+}
+
+/*delete update block li elements*/
+.delete_update li{
+  border: 1px solid black;
+  padding: 10px;
+  list-style-type: none;
+  margin-left:15%;
+  width:40%;
+  text-align:center;
+}
+
+/*update title block*/
+.updT{
+  margin-bottom: 10px;
+  display:inline-block;
+}
+
+/*update title text box*/
+#updateTitle{
+  display:inline-block;
+  margin-left: 40px;
+  width: 300px;
+}
+
+/*update Category block*/
+.updCat{
+  margin-bottom: 10px;
+  display:inline-block;
+}
+
+/*update category text box*/
+#updateCat{
+  display:inline-block;
+  margin-left: 40px;
+  width: 300px;
+}
+
+/*Entire chat block*/
+.chatbox {
+  top: 100px;
+  position: relative;
+  height: 300px;
+  width: 60%;
+  margin-left: 250px;
+  background-color: white;
+  overflow-y:auto;
+}
+
+/*chat messages*/
+.conversation {
+  list-style: none;
+}
+
+/*Entire messages form*/
+.messages {
+  top: 100px;
+  padding-top: 10px;
+  height: 200px;
+  position: relative;
+  margin-left: 235px;
+}
+
+/*text input*/
+#text {
+  width: 700px;
+  height: 30px;
+}
+
+/*button click*/
+#button {
+  width: 100px;
+  height: 30px;
+}
+
+.go_back_to_main{
+  position: relative;
+  top:100px;
+  left:240px;
+}
+
+.go_back_to_main p{
+  border: 1px solid black;
+  text-align:center;
+  padding: 10px;
+  width: 100px;
+  margin:0px;
+}
+
+/*chat room box*/
+
+.find_chatrooms {
+  margin: 60px auto 10px auto;
+  background-color: white;
+  height: 70%;
+  padding: 10px;
+}
+
+
+/*legend stuff*/
+
+.chatroom_legend {
+  font-size: 30px;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+
+/*labels in chatroom form*/
+
+.chatroom_form label {
+  display: block;
+  margin-bottom: 5px;
+  height: 10%;
+}
+
+
+/*inputs in chatroom form*/
+
+.chatroom_form input {
+  display: block;
+  width: 100%;
+  height: 10%;
+  margin-bottom: 15px;
+}
+
+
+/*submit button in chatroom form*/
+
+.chatroom_form button {
+  height: 10%;
+  cursor: pointer;
+}
+
+/*chatroom list*/
+
+.list_chatroom {
+  margin: 0 auto;
+  background-color: white;
+  height: 70%;
+  padding: 10px;
+}
+
+
+/*chatroom p element*/
+
+.list_chatroom p {
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  font-size: 30px;
+}
+
+
+/*chatroom ul element*/
+
+.list_chatroom ul {
+  list-style-type: none;
+  cursor: pointer;
+}
+
+
+/*chatroom li element*/
+
+.list_chatroom li {
+  margin-bottom: 10px;
+}
+
+
+/*chatroom a element*/
+
+.list_chatroom a {
+  text-decoration: none;
+}
+
+
+/*chatroom a element stuff*/
+
+.chatroom_link:link {
+  color: black;
+}
+
+.chatroom_link:visted {
+  color: black;
+}
+
+.category_list {
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 130px;
+  width: 100%;
+  background-color: white;
+}
+
+.category_list p {
+  margin: 0;
+  padding: 10px 0;
+  font-size: 30px;
+}
+
+.category_list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.category_list li {
+  display: inline-block;
+  font-size: 20px;
+  padding-right: 10px;
+}
+
+.messages #button {
+  cursor: pointer;
+}
+
+.delete_update .deleteChat {
+  cursor: pointer;
+}
+
+.go_back_to_main {
+  cursor: pointer;
+}
+
+/*white container*/
+
+.container {
+  margin: 0 auto;
+  background-color: white;
+  height: 70%;
+  width: 80%;
+  position: relative;
+  top: 18%;
+}
+
+/*legend stuff*/
+
+.signup_legend {
+  font-size: 30px;
+  text-align: center;
+  padding-bottom: 5px;
+}
+
+
+/*signup form*/
+
+.signup_form {
+  padding: 10px;
+}
+
+
+/*labels in signup form*/
+
+.signup_form label {
+  display: block;
+  margin-bottom: 5px;
+  height: 10%;
+}
+
+
+/*inputs in signup form*/
+
+.signup_form input {
+  display: block;
+  width: 100%;
+  height: 10%;
+  margin-bottom: 15px;
+}
+
+
+/*submit button in signup form*/
+
+.signup_form button {
+  height: 10%;
+  cursor: pointer;
+}
+
+/*legend stuff*/
+
+.login_legend {
+  font-size: 30px;
+  text-align: center;
+  padding-bottom: 15px;
+}
+
+
+/*login form*/
+
+.login_form {
+  padding: 20px;
+}
+
+
+/*labels in login form*/
+
+.login_form label {
+  display: block;
+  margin-bottom: 5px;
+  height: 10%;
+}
+
+
+/*inputs in login form*/
+
+.login_form input {
+  display: block;
+  width: 100%;
+  height: 10%;
+  margin-bottom: 15px;
+}
+
+
+/*submit button in login form*/
+
+.login_form button {
+  height: 10%;
+  cursor: pointer;
+}
