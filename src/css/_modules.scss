@@ -79,13 +79,6 @@
 //----------------------------------------------------------------------------
 //  MAIN
 //----------------------------------------------------------------------------
-/*fieldset default*/
-
-fieldset {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
 
 /*Login/signup font stuff*/
 
@@ -112,10 +105,6 @@ fieldset {
 html, body, .signup_login, .main_screen, .chatroom_interior {
   height: 100%;
   overflow: auto;
-}
-
-body {
-  background-color: #4C86A8;
 }
 
 .main_screen {
