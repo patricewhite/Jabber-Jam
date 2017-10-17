@@ -14,12 +14,13 @@ mongoose.Promise = global.Promise;
 
 app.use(cors());
 // app.use(setCorsHeaders);
-app.use( '/', express.static(__dirname + '/public') );
-app.use( '/src', express.static(__dirname + '/src') );
-app.use( '/css', express.static(__dirname + '/src/css') );
-app.use( '/js', express.static(__dirname + '/src/js') );
-app.use( '/jquery', express.static(__dirname + '/node_modules/jquery/dist') );
+app.use('/', express.static(__dirname + '/public'));
+app.use('/src', express.static(__dirname + '/src'));
+app.use('/css', express.static(__dirname + '/src/css'));
+app.use('/js', express.static(__dirname + '/src/js'));
+app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/users', userRouter);
+app.use('/views', express.static(__dirname + '/src/views'));
 app.use('/chatrooms', chatRouter);
 app.use(morgan('common'));
 
@@ -35,7 +36,7 @@ app.get('/', (request, response) => {
 });
 
 let server;
-function runServer(databaseUrl=DATABASE_URL, port=PORT) {
+function runServer(databaseUrl = DATABASE_URL, port = PORT) {
 
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl, err => {
@@ -45,8 +46,7 @@ function runServer(databaseUrl=DATABASE_URL, port=PORT) {
       server = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();
-      })
-      .on('error', err => {
+      }).on('error', err => {
         mongoose.disconnect();
         reject(err);
       });
@@ -72,7 +72,11 @@ if (require.main === module) {
   runServer().catch(err => console.error(err));
 }
 
-module.exports = {app, runServer, closeServer};
+module.exports = {
+  app,
+  runServer,
+  closeServer
+};
 
 // app.listen(process.env.PORT || 8080);
 //
